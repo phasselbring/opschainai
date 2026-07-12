@@ -1,7 +1,7 @@
 <html lang="en"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>APEX — Governed Enterprise AI Gateway | OpsChainAI</title>
+<title>APEX | Governed Enterprise AI Gateway | OpsChainAI</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
@@ -586,7 +586,7 @@
   /* RESOURCES */
   .resources-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     gap: 1rem;
     margin-top: 3rem;
   }
@@ -757,6 +757,7 @@
     <a href="#problem" class="nav-link">The Problem</a>
     <a href="#architecture" class="nav-link">Architecture</a>
     <a href="#delivery" class="nav-link">Delivery</a>
+    <a href="/apex/demo/" class="nav-link">Live Demo</a>
     <a href="#resources" class="nav-link">Resources</a>
   </div>
   <div style="display:flex; gap:1rem; align-items:center;">
@@ -1000,6 +1001,11 @@
   <h2>Go <span class="accent">deeper.</span></h2>
 
   <div class="resources-grid reveal">
+    <div class="resource-card">
+      <div class="resource-title">Live Controls Walkthrough</div>
+      <div class="resource-body">Step through three running governance controls: security-trimmed retrieval, the DLP boundary, and deterministic data access with database-enforced permissions.</div>
+      <a href="/apex/demo/" class="resource-cta">Open Walkthrough</a>
+    </div>
     <div class="resource-card">
       <div class="resource-title">Demo Narrative</div>
       <div class="resource-body">Short walkthrough of the APEX governance architecture, rogue-vs-approved server model, policy enforcement, and audit flow.</div>
