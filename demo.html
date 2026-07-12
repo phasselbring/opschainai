@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>APEX | Secure AI, Demonstrated</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=Inter:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0B0F14; --panel:#111926; --panel2:#0E1520; --hairline:#1E2A3A;
+    --text:#E6EDF5; --muted:#8A9BB0; --faint:#5A6B80;
+    --steel:#3BD6FF; --steel-dim:#14556E;
+    --allow:#3FB37F; --redact:#E8A33D; --deny:#E05252;
+    --slide-pad:clamp(24px,5vw,72px);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--ink); color:var(--text);
+    font-family:'Inter',system-ui,sans-serif; font-size:16px; line-height:1.6;
+  }
+  main{height:100vh; overflow-y:auto; scroll-snap-type:y mandatory}
+  section.slide{
+    min-height:100vh; scroll-snap-align:start;
+    display:flex; flex-direction:column; justify-content:center;
+    padding:var(--slide-pad); padding-left:calc(var(--slide-pad) + 48px);
+    border-bottom:1px solid var(--hairline); position:relative;
+  }
+  .eyebrow{
+    font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.18em;
+    text-transform:uppercase; color:var(--steel); margin-bottom:14px;
+  }
+  .eyebrow .sep{color:var(--faint); margin:0 8px}
+  h1,h2{font-family:'Space Grotesk',sans-serif; font-weight:600; line-height:1.12; letter-spacing:-.01em}
+  h1{font-size:clamp(34px,5.2vw,64px); max-width:16ch}
+  h2{font-size:clamp(26px,3.6vw,44px); max-width:20ch; margin-bottom:10px}
+  .lede{color:var(--muted); max-width:62ch; font-size:clamp(15px,1.4vw,18px); margin-top:14px}
+  .cols{display:grid; grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr); gap:clamp(20px,3vw,44px); margin-top:34px; align-items:start}
+
+  .beats{display:flex; flex-direction:column; gap:12px}
+  .beat{
+    display:grid; grid-template-columns:30px 1fr; gap:14px; align-items:baseline;
+    padding:14px 16px; background:var(--panel2); border:1px solid var(--hairline); border-radius:10px;
+  }
+  .beat b{font-weight:500; color:var(--text)}
+  .beat .n{font-family:'IBM Plex Mono',monospace; color:var(--faint); font-size:13px}
+  .beat p{color:var(--muted); font-size:14.5px; margin-top:2px}
+
+  .proof{
+    background:var(--panel); border:1px solid var(--hairline); border-radius:12px;
+    margin-top:16px; overflow:hidden;
+  }
+  .proof .cap{
+    display:flex; align-items:center; gap:10px; padding:9px 14px;
+    border-bottom:1px solid var(--hairline);
+    font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--faint);
+  }
+  .proof .cap::before{content:""; width:8px; height:8px; border-radius:50%; background:var(--steel)}
+  .proof pre{
+    padding:14px 16px; font-family:'IBM Plex Mono',monospace; font-size:12.5px; line-height:1.65;
+    color:#B9C7D9; overflow-x:auto; white-space:pre;
+  }
+  .proof pre .g{color:var(--allow)} .proof pre .a{color:var(--redact)} .proof pre .r{color:var(--deny)} .proof pre .d{color:var(--faint)} .proof pre .s{color:var(--steel)}
+
+  .chip{
+    display:inline-block; font-family:'IBM Plex Mono',monospace; font-size:11.5px;
+    padding:3px 10px; border-radius:999px; border:1px solid; margin:2px 4px 2px 0;
+  }
+  .chip.ok{color:var(--allow); border-color:color-mix(in srgb,var(--allow) 45%, transparent)}
+  .chip.warn{color:var(--redact); border-color:color-mix(in srgb,var(--redact) 45%, transparent)}
+  .chip.bad{color:var(--deny); border-color:color-mix(in srgb,var(--deny) 45%, transparent)}
+  .chip.info{color:var(--steel); border-color:var(--steel-dim)}
+
+  .script{
+    background:linear-gradient(0deg,var(--panel),var(--panel));
+    border:1px solid var(--hairline); border-left:3px solid var(--steel);
+    border-radius:0 12px 12px 0; padding:18px 20px;
+  }
+  .script .tag{
+    display:flex; justify-content:space-between; align-items:center;
+    font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.16em; text-transform:uppercase;
+    color:var(--steel); margin-bottom:10px;
+  }
+  .script .tag em{color:var(--faint); font-style:normal}
+  .script p{color:#C7D3E2; font-size:15px; line-height:1.75}
+  .script p + p{margin-top:10px}
+  .script .land{color:var(--text); font-weight:500}
+
+  .vs{display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-top:30px}
+  .card{background:var(--panel); border:1px solid var(--hairline); border-radius:12px; padding:20px}
+  .card.bad{border-color:color-mix(in srgb,var(--deny) 35%, var(--hairline))}
+  .card.ok{border-color:color-mix(in srgb,var(--allow) 35%, var(--hairline))}
+  .card h3{font-family:'Space Grotesk',sans-serif; font-weight:500; font-size:17px; margin-bottom:4px}
+  .card .sub{color:var(--muted); font-size:13.5px; margin-bottom:12px}
+
+  .dots{
+    position:fixed; left:18px; top:50%; transform:translateY(-50%);
+    display:flex; flex-direction:column; gap:10px; z-index:10;
+  }
+  .dots a{width:8px; height:8px; border-radius:50%; background:var(--hairline); display:block; transition:background .2s, transform .2s}
+  .dots a.on{background:var(--steel); transform:scale(1.35)}
+  .dots a:focus-visible{outline:2px solid var(--steel); outline-offset:3px}
+
+  .navhint{
+    position:fixed; right:20px; bottom:16px; z-index:10;
+    font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--faint);
+  }
+  .home-link{
+    position:fixed; right:20px; top:16px; z-index:20;
+    font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--steel); text-decoration:none;
+    background:rgba(11,15,20,.88); border:1px solid var(--steel-dim);
+    border-radius:8px; padding:8px 12px; backdrop-filter:blur(10px);
+  }
+  .home-link:hover{border-color:var(--steel); color:var(--text)}
+  .home-link:focus-visible{outline:2px solid var(--steel); outline-offset:2px}
+  .slideno{
+    position:absolute; top:calc(var(--slide-pad) - 10px); right:var(--slide-pad);
+    font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--faint);
+  }
+  .kicker{color:var(--faint); font-size:13px; margin-top:26px; max-width:60ch}
+  .kicker code{font-family:'IBM Plex Mono',monospace; color:var(--muted); font-size:12.5px}
+
+  .cta{display:flex; gap:14px; margin-top:30px; flex-wrap:wrap}
+  .btn{
+    font-family:'Space Grotesk',sans-serif; font-weight:500; font-size:15px;
+    padding:12px 22px; border-radius:10px; text-decoration:none; border:1px solid var(--steel-dim); color:var(--text);
+  }
+  .btn.primary{background:var(--steel); color:#0A1220; border-color:var(--steel)}
+  .btn:focus-visible{outline:2px solid var(--steel); outline-offset:2px}
+
+  .stat{display:flex; gap:34px; margin-top:34px; flex-wrap:wrap}
+  .stat div b{font-family:'Space Grotesk',sans-serif; font-size:26px; font-weight:600; display:block}
+  .stat div span{color:var(--muted); font-size:13px}
+
+  .opt{
+    display:inline-block; font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.14em;
+    color:var(--redact); border:1px dashed color-mix(in srgb,var(--redact) 50%, transparent);
+    padding:3px 10px; border-radius:6px; margin-left:10px; vertical-align:middle; text-transform:uppercase;
+  }
+
+  body.notes-hidden .script{display:none}
+  body.notes-hidden .cols{grid-template-columns:1fr}
+  @media (max-width:920px){
+    .cols,.vs{grid-template-columns:1fr}
+    section.slide{padding-left:var(--slide-pad)}
+    .dots{display:none}
+  }
+  @media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto} }
+</style>
+</head>
+<body>
+
+<a class="home-link" href="/" aria-label="Return to OpsChainAI">← OpsChainAI</a>
+<nav class="dots" aria-label="Slides"></nav>
+<div class="navhint">↑ ↓ arrows · 8 slides · N for presenter notes</div>
+
+<main id="deck">
+
+<!-- SLIDE 1 : TITLE -->
+<section class="slide" id="s1">
+  <div class="slideno">01 / 08</div>
+  <div class="eyebrow">APEX <span class="sep">·</span> Governed enterprise AI gateway <span class="sep">·</span> Live demonstration</div>
+  <h1>Secure AI, demonstrated.</h1>
+  <p class="lede">Three controls, running on Azure, each with a proof you can watch fire and an audit record you can hand to an examiner. Roughly ten minutes.</p>
+  <div class="stat">
+    <div><b>3</b><span>controls demonstrated live</span></div>
+    <div><b>0</b><span>credentials reachable by the model</span></div>
+    <div><b>100%</b><span>decisions written to audit</span></div>
+  </div>
+  <div class="cols">
+    <div></div>
+    <div class="script">
+      <div class="tag">Narration <em>~40 sec</em></div>
+      <p>Every AI deployment answers three questions, whether anyone asked them or not. What can the model <span class="land">read</span>? What can users <span class="land">send</span> it? And what can it <span class="land">touch</span>?</p>
+      <p>Most deployments answer all three by accident. What I'll show you in the next ten minutes is a working system that answers each one deliberately, and proves it live.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 2 : THREAT FRAMING -->
+<section class="slide" id="s2">
+  <div class="slideno">02 / 08</div>
+  <div class="eyebrow">The problem</div>
+  <h2>Blast radius is a design decision.</h2>
+  <p class="lede">Prompt injection is just text in an email, a document, or a web page, instructing your AI to do something you did not intend. The question is not whether malicious input reaches the model. It's what the model is able to do when it does.</p>
+  <div class="vs">
+    <div class="card bad">
+      <h3>Ungoverned</h3>
+      <div class="sub">AI connected directly to enterprise systems</div>
+      <span class="chip bad">raw_sql</span><span class="chip bad">list_all_blobs</span><span class="chip bad">read_all_secrets</span><span class="chip bad">send_external_email</span>
+      <p class="sub" style="margin-top:12px">The model inherits every permission the connection has. Blast radius: the entire data plane. Audit trail: none.</p>
+    </div>
+    <div class="card ok">
+      <h3>Governed</h3>
+      <div class="sub">AI calls approved capabilities only</div>
+      <span class="chip ok">customer_lookup</span><span class="chip ok">read_approved_document</span><span class="chip ok">policy_status</span><span class="chip info">audit_log</span>
+      <p class="sub" style="margin-top:12px">Every call checked against policy, executed under scoped identity, logged. Default deny.</p>
+    </div>
+  </div>
+  <div class="cols">
+    <div></div>
+    <div class="script">
+      <div class="tag">Narration <em>~30 sec</em></div>
+      <p>Here's the failure mode every headline shares. AI wired directly into enterprise systems means the model, or anything that hijacks it, inherits everything the connection can do.</p>
+      <p><span class="land">The three controls you're about to see each shrink that blast radius at a different boundary.</span></p>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 3 : CONTROL A -->
+<section class="slide" id="s3">
+  <div class="slideno">03 / 08</div>
+  <div class="eyebrow">Control A <span class="sep">·</span> What the model can read</div>
+  <h2>Security-trimmed retrieval.</h2>
+  <p class="lede">Most AI data exposure does not start with an attacker. It starts with retrieval flattening your permission model. Enforcement here happens before the model, not after.</p>
+  <div class="cols">
+    <div>
+      <div class="beats">
+        <div class="beat"><span class="n">A1</span><span><b>No filter: the naive deployment.</b><p>All 8 documents return, including 4 marked partner-only. This is what most RAG vendors ship.</p></span></div>
+        <div class="beat"><span class="n">A2</span><span><b>Junior user: filter from group membership.</b><p>4 documents. Partner-only content was never retrieved, so there was nothing to hide in the answer.</p></span></div>
+        <div class="beat"><span class="n">A3</span><span><b>Partner user: entitled to both groups.</b><p>All 8 documents, because policy allows it, not because the filter is missing.</p></span></div>
+      </div>
+      <div class="proof">
+        <div class="cap">Proof: live run output</div>
+        <pre><span class="d">Filter:</span> group_ids/any(g: search.in(g, <span class="s">'demo-sg-allstaff'</span>, ','))
+<span class="d">JUNIOR USER  →</span> Displayed results: <span class="g">4</span>   <span class="d">(AllStaff only)</span>
+<span class="d">PARTNER USER →</span> Displayed results: <span class="g">8</span>   <span class="d">(AllStaff + PartnerOnly)</span>
+<span class="d">Model answer (junior):</span> <span class="a">"PartnerOnly content was not included."</span></pre>
+      </div>
+      <p class="kicker">Production note: the filter is built by the gateway from the caller's identity token. The application never holds an admin key and cannot opt out.</p>
+    </div>
+    <div class="script">
+      <div class="tag">Narration <em>~2 min</em></div>
+      <p>Control A governs what the model can read. Watch three queries against the same index.</p>
+      <p>First, no filter. Eight documents come back, four of them partner-only. This is what a naive deployment looks like, and it is what most of the market ships.</p>
+      <p>Now a junior user. Their group membership becomes the retrieval filter: four documents. The partner content is not redacted from the answer. <span class="land">It was never retrieved. The model cannot leak what it never saw.</span></p>
+      <p>Partner user: all eight, because they are entitled, not because the control is absent.</p>
+      <p>One sentence to take away: <span class="land">enforcement happens before the model, not after it.</span> And in production the filter comes from the identity token at the gateway, not from the application.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 4 : CONTROL B -->
+<section class="slide" id="s4">
+  <div class="slideno">04 / 08</div>
+  <div class="eyebrow">Control B <span class="sep">·</span> What users can send</div>
+  <h2>The DLP egress boundary.</h2>
+  <p class="lede">Samsung's source code didn't leak because of an attacker. It leaked because helpful engineers pasted it into a chatbot. This gateway sits between your people and every model.</p>
+  <div class="cols">
+    <div>
+      <div class="beats">
+        <div class="beat"><span class="n">B1</span><span><b>Clean prompt.</b><p>Passes untouched. <span class="chip ok">allowed</span></p></span></div>
+        <div class="beat"><span class="n">B2</span><span><b>Prompt containing an SSN.</b><p>Redacted before it leaves. The model receives the placeholder, answers, and never sees the value. <span class="chip warn">redacted</span></p></span></div>
+        <div class="beat"><span class="n">B3</span><span><b>Same prompt, block policy.</b><p>Never forwarded at all. <span class="chip bad">blocked</span></p></span></div>
+      </div>
+      <div class="proof">
+        <div class="cap">Proof: audit record (JSONL)</div>
+        <pre>{ "user_id": "paul-demo",
+  "policy_hits": [ { "rule": <span class="a">"US_SSN"</span>, "match_preview": "12[REDACTED]89" } ],
+  "gateway_action": <span class="a">"redacted"</span>,
+  "forwarded_prompt": "Please process this fake SSN <span class="a">[REDACTED_SSN]</span> ...",
+  "forwarded_to_model": <span class="g">true</span> }
+{ "gateway_action": <span class="r">"blocked"</span>,  "forwarded_to_model": <span class="r">false</span> }</pre>
+      </div>
+      <p class="kicker">Production note: demo rules are regex; the production swap is Purview DLP or Presidio behind the same endpoint. The shape of the record is what your auditor wants.</p>
+    </div>
+    <div class="script">
+      <div class="tag">Narration <em>~2 min</em></div>
+      <p>Control B governs what users can send. The Samsung leak was not malicious. It was helpful people with a deadline. Access control does nothing for that; the problem is what crosses the wire.</p>
+      <p>Three requests through the gateway. A clean prompt passes untouched. A prompt containing a social security number is redacted before it leaves. The model gets the placeholder and still answers the question. The same prompt under a block policy never leaves at all.</p>
+      <p>Every decision, whether allowed, redacted, or blocked, writes an audit record: who, which rule, what action, and whether anything reached the model.</p>
+      <p><span class="land">When your examiner asks how you know sensitive data never left, this file is the answer.</span></p>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 5 : CONTROL C -->
+<section class="slide" id="s5">
+  <div class="slideno">05 / 08</div>
+  <div class="eyebrow">Control C <span class="sep">·</span> What the model can touch</div>
+  <h2>Deterministic retrieval. The model never writes SQL.</h2>
+  <p class="lede">The market's answer to "let AI query the database" is text-to-SQL: the model writes queries and you hope. Here, the model's only job is to say what the user meant.</p>
+  <div class="cols">
+    <div>
+      <div class="beats">
+        <div class="beat"><span class="n">C1</span><span><b>Model extracts intent + parameters.</b><p>Natural language in, structured JSON out. Nothing else.</p></span></div>
+        <div class="beat"><span class="n">C2</span><span><b>Governance layer validates.</b><p>Is the intent allowed? Are the parameters legal? Enum-constrained, whitelist-checked.</p></span></div>
+        <div class="beat"><span class="n">C3</span><span><b>App executes one whitelisted stored procedure.</b><p>Under an account that can do nothing else.</p></span></div>
+      </div>
+      <div class="proof">
+        <div class="cap">Proof: the database itself refuses</div>
+        <pre><span class="d">1. Allowed stored procedure call...</span>
+<span class="g">Allowed result: Region=North, TotalRevenue=400000.00</span>
+<span class="d">2. Forbidden direct table read, as the AI's own account...</span>
+<span class="r">EXPECTED DENIAL: The SELECT permission was denied on the
+object 'Revenue', database 'db-secureai', schema 'dbo'.</span></pre>
+      </div>
+      <p class="kicker">Three layers of defense, and the last one is enforced by the SQL engine. No prompt injection can talk its way past a permission that doesn't exist.</p>
+    </div>
+    <div class="script">
+      <div class="tag">Narration <em>~2 min</em></div>
+      <p>Control C is the one you won't see anywhere else. The model never receives credentials and never generates SQL. It does exactly one job: extract intent and parameters from the question.</p>
+      <p>A governance layer then validates the intent and the parameters against a whitelist. The application executes one whitelisted stored procedure, under a database account scoped to that procedure alone.</p>
+      <p>And here's the part I want you to remember. We ask the database for a direct SELECT on the table, as the AI's own account, and SQL Server refuses. That denial is not a prompt rule or a filter. <span class="land">It's enforced by the database engine. There is no jailbreak, no injection, no model failure that gets past a permission that does not exist.</span></p>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 6 : DISCOVERER -->
+<section class="slide" id="s6">
+  <div class="slideno">06 / 08</div>
+  <div class="eyebrow">Scale <span class="sep">·</span> Dynamic data discovery</div>
+  <h2>What you just saw for one table, we generate.</h2>
+  <p class="lede">Control C by hand is a consulting project. The discoverer makes it a product: point it at a data source and it builds the entire governed stack from the schema.</p>
+  <div class="cols">
+    <div>
+      <div class="beats">
+        <div class="beat"><span class="n">D1</span><span><b>Discover.</b><p>Introspects the source: tables, types, relationships, sensitivity.</p></span></div>
+        <div class="beat"><span class="n">D2</span><span><b>Generate.</b><p>Governed view, metric functions, stored procedures, least-privilege grants, typed data access layer.</p></span></div>
+        <div class="beat"><span class="n">D3</span><span><b>Understand.</b><p>Trains the language model that maps user questions to allowed intents. This is the front door to the deterministic layer.</p></span></div>
+        <div class="beat"><span class="n">D4</span><span><b>Answer.</b><p>Users ask in plain language; retrieval is deterministic; AI summarizes results it was handed.</p></span></div>
+      </div>
+      <div class="proof">
+        <div class="cap">Proof: delivered to production</div>
+        <pre><span class="d">Manufacturing enterprise · governed NL interface over live ERP</span>
+Industry benchmark:  <span class="r">8-15 specialists · $1.5M-$4.5M</span>
+Our delivery:        <span class="g">1 architect + 2 part-time devs · 7 weeks</span></pre>
+      </div>
+    </div>
+    <div class="script">
+      <div class="tag">Narration <em>~1 min</em></div>
+      <p>Everything on the previous slide was generated, not hand-built. The discoverer introspects a data source and produces the entire Control C stack from the schema: the governed view, the stored procedures, the permission grants, and the intent model.</p>
+      <p><span class="land">That's how a governed natural-language interface over live ERP data shipped in seven weeks with three people</span>, against an industry benchmark of eight to fifteen specialists. That is also why it gets deployed instead of shelved.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 7 : CONTROL D (OPTIONAL) -->
+<section class="slide" id="s7">
+  <div class="slideno">07 / 08</div>
+  <div class="eyebrow">Reference architecture <span class="sep">·</span> The model plane <span class="opt">Optional for multi-model audiences</span></div>
+  <h2>Your model list becomes policy.</h2>
+  <p class="lede">There are 400+ models on the open market, including inference sold by anonymous, decentralized GPU networks. Which ones your data may reach should be a policy decision, not a developer preference.</p>
+  <div class="cols">
+    <div>
+      <div class="beats">
+        <div class="beat"><span class="n">E1</span><span><b>Approved model, through the gateway.</b><p>Request passes; provider key injected server-side; tokens metered per team. <span class="chip ok">200</span></p></span></div>
+        <div class="beat"><span class="n">E2</span><span><b>Off-policy model or provider.</b><p>Refused before the request leaves your tenant, and logged. <span class="chip bad">403 · model not in policy</span></p></span></div>
+      </div>
+      <div class="proof">
+        <div class="cap">Reference policy behavior</div>
+        <pre><span class="d">POST /models/chat/completions  model=</span><span class="s">"anthropic/claude-sonnet"</span>
+<span class="g">200 OK</span>   <span class="d">tokens metered · key never left the vault</span>
+<span class="d">POST /models/chat/completions  model=</span><span class="a">"unlisted/decentralized-net"</span>
+<span class="r">403 Model not in policy</span>   <span class="d">· decision written to audit</span></pre>
+      </div>
+      <p class="kicker">This is the next model-plane extension. It is not part of the current Control A, B, and C test run.</p>
+    </div>
+    <div class="script">
+      <div class="tag">Narration <em>~1 min</em></div>
+      <p>One more surface, if your teams use more than one model: the model plane itself. Every request to every provider transits the same gateway.</p>
+      <p>An approved model passes, with the provider key injected at the gateway so no application ever holds it. A request aimed at anything off policy, whether a consumer endpoint or an anonymous decentralized network, is refused before it leaves your tenant, and the refusal is logged.</p>
+      <p><span class="land">Shadow AI stops being something you discover. It becomes something that can't connect.</span></p>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 8 : CLOSE -->
+<section class="slide" id="s8">
+  <div class="slideno">08 / 08</div>
+  <div class="eyebrow">The takeaway</div>
+  <h2>Three boundaries. Every call. Written down.</h2>
+  <div class="vs" style="grid-template-columns:repeat(3,1fr)">
+    <div class="card"><h3>Control A</h3><div class="sub">Governs what the model can <b>read</b></div><span class="chip info">retrieval trim</span></div>
+    <div class="card"><h3>Control B</h3><div class="sub">Governs what users can <b>send</b></div><span class="chip info">DLP egress</span></div>
+    <div class="card"><h3>Control C</h3><div class="sub">Governs what AI can <b>touch</b></div><span class="chip info">deterministic access</span></div>
+  </div>
+  <p class="lede" style="margin-top:26px">The demonstrated controls run on Azure AI Search, Azure OpenAI, Azure SQL, and Key Vault. The production gateway adds API Management and Entra ID at the trust boundary.</p>
+  <div class="cta">
+    <a class="btn primary" href="mailto:paulh@npmit.com?subject=AI%20Gateway%20Governance%20Assessment">Book the governance assessment</a>
+    <a class="btn" href="/">View the architecture</a>
+  </div>
+  <div class="cols">
+    <div></div>
+    <div class="script">
+      <div class="tag">Narration <em>~40 sec · close</em></div>
+      <p>Everything you saw is running software, on services your team already knows how to operate. Nothing here requires trusting the model to behave. <span class="land">Every control holds even when the model does not.</span></p>
+      <p>The next step is a fixed-scope assessment: we inventory every AI asset touching your systems, map what each one can reach today, and hand you the remediation roadmap. Two to three weeks, fixed price. <span class="land">You'll know your blast radius before someone else demonstrates it for you.</span></p>
+    </div>
+  </div>
+  <p class="kicker">Paul Hasselbring · Founder &amp; Principal Architect · NPM Technologies · Fort Lauderdale, FL · paulh@npmit.com</p>
+</section>
+
+</main>
+
+<script>
+  const main=document.getElementById('deck');
+  const slides=[...document.querySelectorAll('section.slide')];
+  const dots=document.querySelector('.dots');
+  slides.forEach((s,i)=>{
+    const a=document.createElement('a');
+    a.href='#'+s.id; a.setAttribute('aria-label','Slide '+(i+1));
+    dots.appendChild(a);
+  });
+  const dotEls=[...dots.children];
+  const io=new IntersectionObserver(es=>{
+    es.forEach(e=>{ if(e.isIntersecting){
+      const i=slides.indexOf(e.target);
+      dotEls.forEach((d,j)=>d.classList.toggle('on',j===i));
+    }});
+  },{root:main,threshold:.55});
+  slides.forEach(s=>io.observe(s));
+  const wantNotes=new URLSearchParams(location.search).get('notes')==='1'||location.hash==='#notes';
+  if(!wantNotes) document.body.classList.add('notes-hidden');
+  document.addEventListener('keydown',e=>{
+    if(e.key==='n'||e.key==='N'){document.body.classList.toggle('notes-hidden'); return;}
+    const cur=dotEls.findIndex(d=>d.classList.contains('on'));
+    if(e.key==='ArrowDown'||e.key==='PageDown'||e.key===' '){e.preventDefault(); slides[Math.min(cur+1,slides.length-1)].scrollIntoView({behavior:'smooth'});}
+    if(e.key==='ArrowUp'||e.key==='PageUp'){e.preventDefault(); slides[Math.max(cur-1,0)].scrollIntoView({behavior:'smooth'});}
+  });
+</script>
+</body>
+</html>
