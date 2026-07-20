@@ -1,7 +1,8 @@
+<!DOCTYPE html>
 <html lang="en"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>APEX | Governed Enterprise AI Gateway | OpsChainAI</title>
+<title>APEX — Governed Enterprise AI Gateway | OpsChainAI</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
@@ -586,7 +587,7 @@
   /* RESOURCES */
   .resources-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: 1rem;
     margin-top: 3rem;
   }
@@ -730,6 +731,24 @@
     transform: translateY(0);
   }
 
+  /* EMBEDDED VIDEO */
+  .video-frame {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%;
+    border: 1px solid var(--border);
+    overflow: hidden;
+    margin-top: 0.5rem;
+  }
+
+  .video-frame iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
   @media (max-width: 768px) {
     nav { padding: 1rem 1.5rem; }
     .nav-links { display: none; }
@@ -798,7 +817,7 @@
       <div class="ticker-item"><span>&#9656;</span> Azure APIM</div>
       <div class="ticker-item"><span>&#9656;</span> Managed Identity</div>
       <div class="ticker-item"><span>&#9656;</span> Default Deny</div>
-      <div class="ticker-item"><span>&#9656;</span> EU AI Act Ready</div>
+      <div class="ticker-item"><span>&#9656;</span> EU AI Act Article 50</div>
       <div class="ticker-item"><span>&#9656;</span> Governed AI Access</div>
       <div class="ticker-item"><span>&#9656;</span> Zero Trust Architecture</div>
       <div class="ticker-item"><span>&#9656;</span> MCP Gateway</div>
@@ -808,7 +827,7 @@
       <div class="ticker-item"><span>&#9656;</span> Azure APIM</div>
       <div class="ticker-item"><span>&#9656;</span> Managed Identity</div>
       <div class="ticker-item"><span>&#9656;</span> Default Deny</div>
-      <div class="ticker-item"><span>&#9656;</span> EU AI Act Ready</div>
+      <div class="ticker-item"><span>&#9656;</span> EU AI Act Article 50</div>
     </div>
   </div>
 </div>
@@ -829,7 +848,7 @@
   </div>
   <div class="stat">
     <div class="stat-num">Aug 2</div>
-    <div class="stat-label">EU AI Act Enforcement</div>
+    <div class="stat-label">EU AI Act Transparency Duties</div>
   </div>
 </div>
 
@@ -1007,19 +1026,27 @@
       <a href="/apex/demo/" class="resource-cta">Open Walkthrough</a>
     </div>
     <div class="resource-card">
-      <div class="resource-title">Demo Narrative</div>
-      <div class="resource-body">Short walkthrough of the APEX governance architecture, rogue-vs-approved server model, policy enforcement, and audit flow.</div>
-      <a href="https://youtu.be/b6SZiZbNGBc" class="resource-cta">Watch Video</a>
-    </div>
-    <div class="resource-card">
       <div class="resource-title">Technical Brief</div>
       <div class="resource-body">Full architecture overview including governance layers, APIM enforcement, audit model, and enterprise value proposition.</div>
-      <a href="/apex/pdf/APEX.pdf" class="resource-cta">Download PDF</a>
+      <a href="/apex/pdf/APEX-v07.pdf" class="resource-cta">Download PDF</a>
     </div>
     <div class="resource-card">
       <div class="resource-title">Technical Briefing</div>
       <div class="resource-body">Review enterprise AI governance posture, capability surfaces, MCP/agent risk, and APEX deployment options with your security team.</div>
       <a href="#contact" class="resource-cta">Schedule</a>
+    </div>
+    <div class="resource-card" style="grid-column: 1 / -1;">
+      <div class="resource-title">Demo Narrative</div>
+      <div class="resource-body">Short walkthrough of the APEX governance architecture, rogue-vs-approved server model, policy enforcement, and audit flow.</div>
+      <div class="video-frame">
+        <iframe
+          src="https://www.youtube-nocookie.com/embed/b6SZiZbNGBc?rel=0"
+          title="APEX governance architecture walkthrough"
+          loading="lazy"
+          allow="accelerometer; clipboard-write; encrypted-media; picture-in-picture"
+          allowfullscreen
+          referrerpolicy="strict-origin-when-cross-origin"></iframe>
+      </div>
     </div>
   </div>
 </section>
@@ -1044,7 +1071,7 @@
 
 <footer>
   <div class="footer-logo">Ops<span>Chain</span>AI</div>
-  <div class="footer-copy">APEX is a working reference architecture for enterprise AI governance, designed and built by NPM Technologies on Microsoft Azure. &nbsp;·&nbsp; apex v0.5</div>
+  <div class="footer-copy">APEX is a working reference architecture for enterprise AI governance, designed and built by NPM Technologies on Microsoft Azure. &nbsp;·&nbsp; apex v0.7</div>
 </footer>
 
 <script>
