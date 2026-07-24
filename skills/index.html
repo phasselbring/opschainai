@@ -1,1 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Enterprise Agent Skills — Executable Knowledge for Governed AI | OpsChainAI</title>
+<meta name="description" content="Quality-assured enterprise Agent Skills for AI governance, MCP control, governed RAG, deterministic data access, executive review, and operational AI.">
+<meta name="theme-color" content="#080c10">
+<link rel="canonical" href="https://opschainai.com/skills/">
+<meta property="og:title" content="OpsChainAI Enterprise Agent Skills">
+<meta property="og:description" content="Markdown is the package. Judgment is the product. Tested, scoped, evidence-bound skills for governed enterprise AI.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://opschainai.com/skills/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080c10;
+    --surface: #0d1318;
+    --surface2: #0a1015;
+    --border: #1a2530;
+    --accent: #00d4ff;
+    --accent2: #00ff9d;
+    --text: #e8eef4;
+    --muted: #6d8392;
+    --card: #0f1820;
+    --danger: #ff6b6b;
+    --danger-bg: #1a0f0f;
+    --warn: #ffc857;
+    --safe-bg: #0f1a12;
+  }
 
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+  a { color: inherit; }
+  code { font-family: 'DM Mono', monospace; }
+
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 1.25rem 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+    background: rgba(8,12,16,0.88);
+    backdrop-filter: blur(12px);
+  }
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.1rem;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    text-decoration: none;
+  }
+  .logo span { color: var(--accent); }
+  .nav-links { display: flex; gap: 1.75rem; align-items: center; }
+  .nav-link {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-link:hover, .nav-link.active { color: var(--text); }
+  .nav-cta {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    text-decoration: none;
+    border: 1px solid var(--accent);
+    padding: 0.5rem 1.1rem;
+    transition: all 0.2s;
+  }
+  .nav-cta:hover { background: var(--accent); color: var(--bg); }
+
+  .hero {
+    position: relative;
+    min-height: 94vh;
+    display: flex;
+    align-items: center;
+    padding: 8rem 3rem 9rem;
+    z-index: 1;
+  }
+  .hero-inner { max-width: 1100px; margin: 0 auto; width: 100%; }
+  .hero-label, .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.67rem;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    text-transform: uppercase;
+  }
+  .hero-label { margin-bottom: 2rem; opacity: 0; animation: fadeUp 0.6s ease forwards 0.15s; }
+  .hero-label::before, .section-label::before { content: '// '; opacity: 0.5; }
+  h1, h2, h3 { font-family: 'Syne', sans-serif; }
+  h1 {
+    font-weight: 800;
+    font-size: clamp(2.7rem, 6.2vw, 6rem);
+    line-height: 1.02;
+    letter-spacing: -0.045em;
+    max-width: 1000px;
+    margin-bottom: 2rem;
+    opacity: 0;
+    animation: fadeUp 0.6s ease forwards 0.3s;
+  }
+  h1 .accent { color: var(--accent); }
+  h1 .accent2 { color: var(--accent2); }
+  .hero-sub {
+    font-size: 1.15rem;
+    color: #869aa9;
+    max-width: 720px;
+    line-height: 1.8;
+    margin-bottom: 1.4rem;
+    opacity: 0;
+    animation: fadeUp 0.6s ease forwards 0.45s;
+  }
+  .hero-note {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--accent2);
+    border-left: 2px solid var(--accent2);
+    padding: 0.15rem 0 0.15rem 1rem;
+    margin-bottom: 2.6rem;
+    max-width: 760px;
+    opacity: 0;
+    animation: fadeUp 0.6s ease forwards 0.55s;
+  }
+  .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; opacity: 0; animation: fadeUp 0.6s ease forwards 0.65s; }
+  .btn-primary, .btn-secondary, .btn-danger {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.77rem;
+    letter-spacing: 0.07em;
+    padding: 0.85rem 1.5rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    border: 1px solid transparent;
+    cursor: pointer;
+  }
+  .btn-primary { background: var(--accent); color: var(--bg); font-weight: 500; }
+  .btn-primary:hover { background: #00b8e0; transform: translateY(-1px); }
+  .btn-secondary { color: var(--text); border-color: var(--border); background: transparent; }
+  .btn-secondary:hover { border-color: var(--muted); }
+  .btn-danger { color: var(--danger); border-color: rgba(255,107,107,0.45); background: rgba(255,107,107,0.05); }
+
+  .ticker {
+    position: absolute;
+    bottom: 2.75rem;
+    left: 0; right: 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 0.72rem 0;
+    overflow: hidden;
+    opacity: 0;
+    animation: fadeIn 0.6s ease forwards 0.9s;
+  }
+  .ticker-inner { display: flex; gap: 4rem; animation: ticker 28s linear infinite; white-space: nowrap; }
+  .ticker-item {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.63rem;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    text-transform: uppercase;
+    flex-shrink: 0;
+  }
+  .ticker-item span { color: var(--accent); margin-right: 0.5rem; }
+
+  .stats {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    background: var(--surface);
+  }
+  .stat { padding: 2.5rem 2.4rem; border-right: 1px solid var(--border); }
+  .stat:last-child { border-right: none; }
+  .stat-num { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 2.3rem; color: var(--accent); line-height: 1; margin-bottom: 0.65rem; }
+  .stat:nth-child(2) .stat-num { color: var(--danger); }
+  .stat:nth-child(3) .stat-num { color: var(--accent2); }
+  .stat-label { font-family: 'DM Mono', monospace; font-size: 0.63rem; letter-spacing: 0.1em; color: var(--muted); text-transform: uppercase; line-height: 1.55; }
+
+  section { position: relative; z-index: 1; padding: 6rem 3rem; max-width: 1100px; margin: 0 auto; }
+  .wide-section { max-width: none; padding-left: 0; padding-right: 0; }
+  .wide-inner { max-width: 1100px; margin: 0 auto; padding: 0 3rem; }
+  .section-label { margin-bottom: 1rem; }
+  h2 { font-weight: 700; font-size: clamp(2rem, 4.5vw, 3.45rem); letter-spacing: -0.025em; line-height: 1.08; margin-bottom: 1.4rem; }
+  h2 .accent { color: var(--accent); }
+  h2 .accent2 { color: var(--accent2); }
+  .section-desc { color: #7e93a2; max-width: 720px; font-size: 1rem; line-height: 1.85; }
+  .micro-note { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--muted); margin-top: 1rem; max-width: 780px; }
+  .micro-note a { color: var(--accent); text-decoration: none; border-bottom: 1px solid rgba(0,212,255,.35); }
+
+  .evidence-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 3rem; }
+  .evidence-card { border: 1px solid var(--border); background: var(--card); padding: 2rem; min-height: 270px; position: relative; }
+  .evidence-card::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: var(--accent); transform: scaleX(0); transform-origin: left; transition: transform .25s; }
+  .evidence-card:hover::after { transform: scaleX(1); }
+  .evidence-num { font-family: 'Syne', sans-serif; font-size: 2.2rem; font-weight: 800; color: var(--danger); line-height: 1; margin-bottom: 1rem; }
+  .evidence-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.05rem; margin-bottom: 0.7rem; }
+  .evidence-body { color: var(--muted); font-size: 0.87rem; line-height: 1.75; }
+  .evidence-source { position: absolute; left: 2rem; bottom: 1.5rem; font-family: 'DM Mono', monospace; font-size: 0.64rem; color: var(--accent); text-decoration: none; }
+
+  .contrast-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 3rem; }
+  .contrast-card { border: 1px solid var(--border); padding: 2.4rem; background: var(--card); }
+  .contrast-card.bad { border-color: rgba(255,107,107,0.35); background: var(--danger-bg); }
+  .contrast-card.good { border-color: rgba(0,255,157,0.35); background: var(--safe-bg); }
+  .badge { display: inline-block; font-family: 'DM Mono', monospace; font-size: 0.59rem; letter-spacing: .14em; text-transform: uppercase; padding: .3rem .65rem; margin-bottom: 1.3rem; border: 1px solid; }
+  .badge.bad { color: var(--danger); border-color: rgba(255,107,107,.4); background: rgba(255,107,107,.08); }
+  .badge.good { color: var(--accent2); border-color: rgba(0,255,157,.4); background: rgba(0,255,157,.07); }
+  .contrast-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.18rem; margin-bottom: .65rem; }
+  .contrast-body { color: var(--muted); font-size: .88rem; margin-bottom: 1.2rem; }
+  .check-list { list-style: none; display: grid; gap: .65rem; }
+  .check-list li { color: #8da1b0; font-size: .84rem; padding-left: 1.5rem; position: relative; }
+  .contrast-card.bad .check-list li::before { content: '×'; color: var(--danger); position: absolute; left: 0; font-family: 'DM Mono', monospace; }
+  .contrast-card.good .check-list li::before { content: '✓'; color: var(--accent2); position: absolute; left: 0; font-family: 'DM Mono', monospace; }
+
+  .quality-wrap { background: var(--surface2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .quality-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); margin-top: 3rem; }
+  .quality-gate { background: var(--card); padding: 1.7rem 1.4rem; min-height: 190px; }
+  .gate-num { font-family: 'DM Mono', monospace; font-size: .65rem; color: var(--accent); margin-bottom: 1rem; }
+  .gate-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: .94rem; margin-bottom: .55rem; }
+  .gate-body { color: var(--muted); font-size: .78rem; line-height: 1.65; }
+  .manifest { margin-top: 2rem; border: 1px solid var(--border); background: rgba(0,0,0,.35); padding: 1.5rem; overflow-x: auto; }
+  .manifest pre { font-family: 'DM Mono', monospace; font-size: .74rem; line-height: 1.85; color: #91a7b7; }
+  .manifest .key { color: var(--accent); }
+  .manifest .value { color: var(--accent2); }
+  .manifest .warn { color: var(--warn); }
+
+  .library-head { display: flex; justify-content: space-between; align-items: end; gap: 2rem; flex-wrap: wrap; }
+  .filters { display: flex; gap: .55rem; flex-wrap: wrap; margin-top: 1.2rem; }
+  .filter-btn {
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    font-size: .62rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    padding: .55rem .85rem;
+    cursor: pointer;
+  }
+  .filter-btn:hover, .filter-btn.active { border-color: var(--accent); color: var(--accent); }
+  .skills-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 2.5rem; }
+  .skill-card { border: 1px solid var(--border); background: var(--card); padding: 1.8rem; display: flex; flex-direction: column; min-height: 390px; transition: transform .2s, border-color .2s; }
+  .skill-card:hover { transform: translateY(-3px); border-color: rgba(0,212,255,.55); }
+  .skill-card.hidden { display: none; }
+  .skill-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; margin-bottom: 1.3rem; }
+  .tier { font-family: 'DM Mono', monospace; font-size: .58rem; letter-spacing: .12em; text-transform: uppercase; padding: .28rem .55rem; border: 1px solid; }
+  .tier.open { color: var(--accent2); border-color: rgba(0,255,157,.35); background: rgba(0,255,157,.05); }
+  .tier.pro { color: var(--accent); border-color: rgba(0,212,255,.35); background: rgba(0,212,255,.05); }
+  .tier.enterprise { color: var(--warn); border-color: rgba(255,200,87,.38); background: rgba(255,200,87,.05); }
+  .version { font-family: 'DM Mono', monospace; font-size: .6rem; color: var(--muted); }
+  .skill-title { font-family: 'Syne', sans-serif; font-size: 1.12rem; font-weight: 700; line-height: 1.25; margin-bottom: .7rem; }
+  .skill-body { color: var(--muted); font-size: .84rem; line-height: 1.72; margin-bottom: 1rem; }
+  .skill-output { font-family: 'DM Mono', monospace; font-size: .66rem; color: #8da5b5; border-left: 2px solid var(--border); padding-left: .75rem; margin-bottom: 1rem; }
+  .tags { display: flex; gap: .4rem; flex-wrap: wrap; margin-bottom: 1.2rem; }
+  .tag { font-family: 'DM Mono', monospace; font-size: .57rem; color: var(--muted); border: 1px solid var(--border); padding: .22rem .45rem; }
+  .assurance { display: flex; align-items: center; gap: .55rem; margin-top: auto; margin-bottom: 1rem; font-family: 'DM Mono', monospace; font-size: .62rem; color: var(--accent2); }
+  .assurance::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--accent2); box-shadow: 0 0 12px rgba(0,255,157,.6); }
+  .skill-actions { display: flex; gap: .55rem; flex-wrap: wrap; }
+  .skill-link { font-family: 'DM Mono', monospace; font-size: .67rem; color: var(--bg); background: var(--accent); text-decoration: none; padding: .58rem .85rem; }
+  .skill-link.secondary { color: var(--accent); background: transparent; border: 1px solid rgba(0,212,255,.4); }
+
+  .flow-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); margin-top: 3rem; }
+  .flow-step { background: var(--card); padding: 1.6rem 1.2rem; min-height: 220px; position: relative; }
+  .flow-step::after { content: '→'; position: absolute; right: -10px; top: 50%; transform: translateY(-50%); color: var(--accent); z-index: 2; font-family: 'DM Mono', monospace; }
+  .flow-step:last-child::after { display: none; }
+  .flow-num { font-family: 'DM Mono', monospace; font-size: .65rem; color: var(--accent); margin-bottom: 1rem; }
+  .flow-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: .94rem; margin-bottom: .6rem; }
+  .flow-question { color: var(--accent2); font-family: 'DM Mono', monospace; font-size: .65rem; margin-bottom: .6rem; }
+  .flow-body { color: var(--muted); font-size: .76rem; line-height: 1.6; }
+  .architecture-note { border-left: 3px solid var(--accent2); background: var(--safe-bg); padding: 1.1rem 1.4rem; margin-top: 1.5rem; color: var(--accent2); font-family: 'DM Mono', monospace; font-size: .73rem; }
+
+  .offer-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 3rem; }
+  .offer-card { border: 1px solid var(--border); background: var(--card); padding: 2rem; }
+  .offer-kicker { font-family: 'DM Mono', monospace; font-size: .61rem; letter-spacing: .13em; text-transform: uppercase; color: var(--accent); margin-bottom: 1rem; }
+  .offer-title { font-family: 'Syne', sans-serif; font-size: 1.15rem; font-weight: 700; margin-bottom: .7rem; }
+  .offer-body { color: var(--muted); font-size: .84rem; line-height: 1.72; margin-bottom: 1rem; }
+  .offer-list { list-style: none; display: grid; gap: .5rem; margin-bottom: 1.4rem; }
+  .offer-list li { color: #8ca0ae; font-size: .8rem; padding-left: 1.25rem; position: relative; }
+  .offer-list li::before { content: '▸'; color: var(--accent2); position: absolute; left: 0; }
+
+  .sources-list { margin-top: 2.5rem; border: 1px solid var(--border); }
+  .source-row { display: grid; grid-template-columns: 150px 1fr auto; gap: 1.2rem; align-items: center; padding: 1.25rem 1.4rem; border-bottom: 1px solid var(--border); background: var(--card); }
+  .source-row:last-child { border-bottom: none; }
+  .source-type { font-family: 'DM Mono', monospace; font-size: .6rem; letter-spacing: .1em; color: var(--accent); text-transform: uppercase; }
+  .source-title { font-size: .85rem; color: #9db0bd; }
+  .source-link { font-family: 'DM Mono', monospace; font-size: .65rem; color: var(--accent); text-decoration: none; white-space: nowrap; }
+
+  .contact-block { background: var(--surface); border: 1px solid var(--border); border-top: 3px solid var(--accent); padding: 4rem 3rem; text-align: center; margin: 0 3rem 6rem; position: relative; z-index: 1; }
+  .contact-block h2 { margin-bottom: 1rem; }
+  .contact-sub { color: var(--muted); font-size: .95rem; margin: 0 auto 2.2rem; max-width: 650px; line-height: 1.8; }
+  .contact-email { font-family: 'DM Mono', monospace; font-size: 1.05rem; color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--accent); padding-bottom: 2px; }
+  .contact-meta { margin-top: 1.5rem; font-family: 'DM Mono', monospace; font-size: .64rem; letter-spacing: .1em; color: var(--muted); text-transform: uppercase; }
+
+  footer { position: relative; z-index: 1; border-top: 1px solid var(--border); padding: 2rem 3rem; display: flex; justify-content: space-between; gap: 2rem; align-items: center; }
+  .footer-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: .9rem; color: var(--muted); }
+  .footer-logo span { color: var(--accent); }
+  .footer-copy { font-family: 'DM Mono', monospace; font-size: .62rem; letter-spacing: .08em; color: var(--muted); text-align: right; }
+
+  .reveal { opacity: 0; transform: translateY(22px); transition: opacity .7s ease, transform .7s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  @media (max-width: 960px) {
+    .evidence-grid, .skills-grid, .offer-grid { grid-template-columns: repeat(2, 1fr); }
+    .quality-grid { grid-template-columns: repeat(2, 1fr); }
+    .flow-grid { grid-template-columns: 1fr; }
+    .flow-step::after { display: none; }
+  }
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    .hero { padding: 7rem 1.5rem 9rem; min-height: 90vh; }
+    h1 { font-size: clamp(2.55rem, 13vw, 4.3rem); }
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    .stat { padding: 1.5rem; }
+    .stat:nth-child(2) { border-right: none; }
+    section { padding: 4.5rem 1.5rem; }
+    .wide-inner { padding: 0 1.5rem; }
+    .evidence-grid, .contrast-grid, .skills-grid, .offer-grid { grid-template-columns: 1fr; }
+    .quality-grid { grid-template-columns: 1fr; }
+    .source-row { grid-template-columns: 1fr; gap: .45rem; }
+    .contact-block { margin: 0 1.5rem 4rem; padding: 2.8rem 1.5rem; }
+    footer { flex-direction: column; text-align: center; }
+    .footer-copy { text-align: center; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="logo" href="/">Ops<span>Chain</span>AI</a>
+  <div class="nav-links">
+    <a href="#problem" class="nav-link">The Problem</a>
+    <a href="#standard" class="nav-link">Quality Standard</a>
+    <a href="#library" class="nav-link active">Skills</a>
+    <a href="#architecture" class="nav-link">APEX</a>
+    <a href="/apex/demo/apex-demo.html" class="nav-link">Live Demo</a>
+  </div>
+  <a href="#contact" class="nav-cta">Build Your Library</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-label">Enterprise Agent Skills / Quality-Assured Operating Methods</div>
+    <h1>Markdown is the package.<br><span class="accent">Judgment is the product.</span></h1>
+    <p class="hero-sub">
+      Agent skills turn prose into operational behavior. OpsChainAI publishes enterprise skills for AI governance, secure data access, MCP control, RAG, executive review, and operational decision support—designed to be scoped, testable, evidence-bound, and owned.
+    </p>
+    <div class="hero-note">
+      A skill can tell an agent what to do. APEX determines what it is actually allowed to touch.
+    </div>
+    <div class="hero-actions">
+      <a class="btn-primary" href="#library">Browse the Skills</a>
+      <a class="btn-secondary" href="#standard">View the Quality Standard</a>
+      <a class="btn-secondary" href="/">Explore APEX</a>
+    </div>
+  </div>
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-inner">
+      <div class="ticker-item"><span>▸</span> Explicit Scope</div>
+      <div class="ticker-item"><span>▸</span> Tool Boundaries</div>
+      <div class="ticker-item"><span>▸</span> Evidence Requirements</div>
+      <div class="ticker-item"><span>▸</span> Refusal Paths</div>
+      <div class="ticker-item"><span>▸</span> Evaluation Prompts</div>
+      <div class="ticker-item"><span>▸</span> Human Approval</div>
+      <div class="ticker-item"><span>▸</span> Versioned Ownership</div>
+      <div class="ticker-item"><span>▸</span> Auditability</div>
+      <div class="ticker-item"><span>▸</span> Explicit Scope</div>
+      <div class="ticker-item"><span>▸</span> Tool Boundaries</div>
+      <div class="ticker-item"><span>▸</span> Evidence Requirements</div>
+      <div class="ticker-item"><span>▸</span> Refusal Paths</div>
+      <div class="ticker-item"><span>▸</span> Evaluation Prompts</div>
+      <div class="ticker-item"><span>▸</span> Human Approval</div>
+      <div class="ticker-item"><span>▸</span> Versioned Ownership</div>
+      <div class="ticker-item"><span>▸</span> Auditability</div>
+    </div>
+  </div>
+</div>
+
+<div class="stats">
+  <div class="stat">
+    <div class="stat-num">99%+</div>
+    <div class="stat-label">of 238 sampled SKILL.md files contained at least one quality smell</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">77.6%</div>
+    <div class="stat-label">adversarial skill selection in paired trials reported by one security study</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">8</div>
+    <div class="stat-label">required OpsChainAI assurance gates before publication</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">4</div>
+    <div class="stat-label">free starter skills ready to inspect and download</div>
+  </div>
+</div>
+
+<section id="problem">
+  <div class="section-label">The Quality Problem</div>
+  <h2>Readable does not mean <span class="accent">reliable.</span></h2>
+  <p class="section-desc">
+    A <code>SKILL.md</code> file can be created in minutes. That makes the format powerful—and makes quality, safety, and evidence the scarce part. A 2026 empirical study found that more than 99% of 238 sampled skills contained at least one “skill smell.” That does not mean 99% were worthless. It means almost none should be treated as production-ready merely because the Markdown looks plausible.
+  </p>
+  <p class="micro-note">Research claims below are linked to the original papers and should be read in the context of their samples and experimental designs.</p>
+
+  <div class="evidence-grid reveal">
+    <article class="evidence-card">
+      <div class="evidence-num">99%+</div>
+      <div class="evidence-title">Quality problems are nearly universal</div>
+      <p class="evidence-body">The first systematic study of SKILL.md authoring identified 44 lower-level components and found at least one violation of recommended practice in more than 99% of the 238 real-world files evaluated.</p>
+      <a class="evidence-source" href="https://arxiv.org/abs/2607.01456" target="_blank" rel="noopener">READ THE STUDY ↗</a>
+    </article>
+    <article class="evidence-card">
+      <div class="evidence-num">821K → 96K</div>
+      <div class="evidence-title">Scale creates redundancy and uneven quality</div>
+      <p class="evidence-body">SkillCorpus reported crawling roughly 821,000 skill artifacts and reducing them to 96,401 through a multi-stage curation pipeline organized around utility, robustness, and safety.</p>
+      <a class="evidence-source" href="https://arxiv.org/abs/2607.15557" target="_blank" rel="noopener">READ THE PREPRINT ↗</a>
+    </article>
+    <article class="evidence-card">
+      <div class="evidence-num">77.6%</div>
+      <div class="evidence-title">The text itself is a supply-chain surface</div>
+      <p class="evidence-body">A semantic supply-chain study found that description-only framing biased agents toward adversarial variants in paired trials and that some semantic evasion strategies bypassed registry governance checks.</p>
+      <a class="evidence-source" href="https://arxiv.org/abs/2605.11418" target="_blank" rel="noopener">READ THE SECURITY STUDY ↗</a>
+    </article>
+  </div>
+
+  <div class="contrast-grid reveal">
+    <div class="contrast-card bad">
+      <div class="badge bad">Commodity Skill</div>
+      <div class="contrast-title">A prompt wearing product packaging</div>
+      <p class="contrast-body">It may sound authoritative while leaving the operating boundary undefined.</p>
+      <ul class="check-list">
+        <li>Vague trigger and uncontrolled scope</li>
+        <li>Unspecified tools, identities, and permissions</li>
+        <li>No evidence threshold or source requirements</li>
+        <li>No refusal, escalation, or failure behavior</li>
+        <li>No test prompts, expected results, or regression suite</li>
+        <li>No accountable owner, version, or change record</li>
+      </ul>
+    </div>
+    <div class="contrast-card good">
+      <div class="badge good">Governed Skill</div>
+      <div class="contrast-title">Executable institutional judgment</div>
+      <p class="contrast-body">The instruction, operating boundary, evidence, and human decision point are all explicit.</p>
+      <ul class="check-list">
+        <li>Trigger, non-trigger, and intended user defined</li>
+        <li>Approved tools and data boundaries documented</li>
+        <li>Evidence and confidence requirements specified</li>
+        <li>Refusal and human escalation paths included</li>
+        <li>Evaluated against normal, edge, and adversarial cases</li>
+        <li>Versioned, owned, reviewable, and auditable</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<div class="quality-wrap">
+<section id="standard" class="wide-section">
+  <div class="wide-inner">
+    <div class="section-label">OpsChainAI Assurance Standard</div>
+    <h2>Eight gates before a skill earns <span class="accent2">trust.</span></h2>
+    <p class="section-desc">The Agent Skills specification intentionally leaves the Markdown body flexible. OpsChainAI adds an enterprise assurance layer around that flexibility.</p>
+
+    <div class="quality-grid reveal">
+      <div class="quality-gate"><div class="gate-num">01 / SCOPE</div><div class="gate-title">Activation Boundary</div><div class="gate-body">What triggers the skill, what must not trigger it, who it serves, and what outcome it owns.</div></div>
+      <div class="quality-gate"><div class="gate-num">02 / INPUT</div><div class="gate-title">Required Evidence</div><div class="gate-body">Mandatory inputs, approved sources, freshness requirements, and what to do when evidence is incomplete.</div></div>
+      <div class="quality-gate"><div class="gate-num">03 / PROCEDURE</div><div class="gate-title">Repeatable Method</div><div class="gate-body">A deterministic sequence, decision criteria, output schema, and explicit handling of edge cases.</div></div>
+      <div class="quality-gate"><div class="gate-num">04 / AUTHORITY</div><div class="gate-title">Tool & Data Limits</div><div class="gate-body">Allowed tools, identities, permission scope, data classes, egress rules, and prohibited actions.</div></div>
+      <div class="quality-gate"><div class="gate-num">05 / FAILURE</div><div class="gate-title">Refuse & Escalate</div><div class="gate-body">Conditions that require refusal, redaction, hold, escalation, or a named human approval.</div></div>
+      <div class="quality-gate"><div class="gate-num">06 / EVALS</div><div class="gate-title">Testable Behavior</div><div class="gate-body">Normal, ambiguous, incomplete, adversarial, and regression prompts with expected behavior.</div></div>
+      <div class="quality-gate"><div class="gate-num">07 / OWNERSHIP</div><div class="gate-title">Version & Owner</div><div class="gate-body">Named owner, version, review date, change history, compatibility, and deprecation path.</div></div>
+      <div class="quality-gate"><div class="gate-num">08 / AUDIT</div><div class="gate-title">Evidence of Execution</div><div class="gate-body">What should be logged, retained, cited, and made inspectable after the skill runs.</div></div>
+    </div>
+
+    <div class="manifest reveal" aria-label="Example OpsChainAI assurance manifest">
+<pre><span class="key">skill:</span>            <span class="value">rogue-mcp-tool-audit</span>
+<span class="key">owner:</span>            <span class="value">Enterprise AI Governance</span>
+<span class="key">version:</span>          <span class="value">0.1.0</span>
+<span class="key">trigger:</span>          <span class="value">MCP inventory, tool approval, agent access review</span>
+<span class="key">non_trigger:</span>      <span class="warn">penetration testing or unauthorized system access</span>
+<span class="key">evidence_required:</span><span class="value">server list, tool list, identities, permissions, logs</span>
+<span class="key">critical_failure:</span> <span class="warn">unknown owner, broad credential, unlogged write capability</span>
+<span class="key">decision:</span>         <span class="value">approve · remediate · quarantine · reject</span>
+<span class="key">audit_output:</span>     <span class="value">capability map + finding register + action owner</span></pre>
+    </div>
+  </div>
+</section>
+</div>
+
+<section id="library">
+  <div class="library-head">
+    <div>
+      <div class="section-label">The Skills Library</div>
+      <h2>Start with the methods enterprises <span class="accent">actually need.</span></h2>
+      <p class="section-desc">The free starters demonstrate the standard. Professional packs add worksheets, evaluation suites, implementation patterns, and reusable evidence templates.</p>
+    </div>
+  </div>
+
+  <div class="filters" role="group" aria-label="Filter skills">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="open">Free Starters</button>
+    <button class="filter-btn" data-filter="governance">Governance</button>
+    <button class="filter-btn" data-filter="data">Data & RAG</button>
+    <button class="filter-btn" data-filter="executive">Executive</button>
+    <button class="filter-btn" data-filter="operations">Operations</button>
+  </div>
+
+  <div class="skills-grid reveal">
+    <article class="skill-card" data-category="open governance">
+      <div class="skill-top"><span class="tier open">Free Starter</span><span class="version">v0.1</span></div>
+      <h3 class="skill-title">Agent Skill Quality & Security Audit</h3>
+      <p class="skill-body">Review any SKILL.md before you install, publish, purchase, or approve it. Detect vague activation, hidden authority, missing evidence, unsafe tool use, weak failure handling, and absent evals.</p>
+      <div class="skill-output">OUTPUT → assurance score, critical findings, remediation plan, approval decision</div>
+      <div class="tags"><span class="tag">SKILL.md</span><span class="tag">quality</span><span class="tag">security</span><span class="tag">evals</span></div>
+      <div class="assurance">8/8 assurance sections included</div>
+      <div class="skill-actions"><a class="skill-link" href="library/agent-skill-quality-audit/SKILL.md" download>Download SKILL.md</a><a class="skill-link secondary" href="library/agent-skill-quality-audit/SKILL.md">Inspect</a></div>
+    </article>
+
+    <article class="skill-card" data-category="open governance executive">
+      <div class="skill-top"><span class="tier open">Free Starter</span><span class="version">v0.1</span></div>
+      <h3 class="skill-title">AI Governance Architecture Review</h3>
+      <p class="skill-body">Map what an AI system can read, what users can send, what the AI can touch, what it can decide, and what evidence remains after execution.</p>
+      <div class="skill-output">OUTPUT → capability-surface map, control gaps, risk priorities, pilot recommendation</div>
+      <div class="tags"><span class="tag">architecture</span><span class="tag">identity</span><span class="tag">policy</span><span class="tag">audit</span></div>
+      <div class="assurance">Built around externalized controls</div>
+      <div class="skill-actions"><a class="skill-link" href="library/ai-governance-architecture-review/SKILL.md" download>Download SKILL.md</a><a class="skill-link secondary" href="library/ai-governance-architecture-review/SKILL.md">Inspect</a></div>
+    </article>
+
+    <article class="skill-card" data-category="open governance">
+      <div class="skill-top"><span class="tier open">Free Starter</span><span class="version">v0.1</span></div>
+      <h3 class="skill-title">Rogue MCP & Unapproved Tool Audit</h3>
+      <p class="skill-body">Inventory MCP servers and agent tools, identify unknown owners and identities, map permissions and egress, and classify each capability as approved, remediate, quarantine, or reject.</p>
+      <div class="skill-output">OUTPUT → MCP registry, tool-risk matrix, critical exposures, accountable remediation</div>
+      <div class="tags"><span class="tag">MCP</span><span class="tag">tools</span><span class="tag">zero trust</span><span class="tag">egress</span></div>
+      <div class="assurance">Default-deny decision model</div>
+      <div class="skill-actions"><a class="skill-link" href="library/rogue-mcp-tool-audit/SKILL.md" download>Download SKILL.md</a><a class="skill-link secondary" href="library/rogue-mcp-tool-audit/SKILL.md">Inspect</a></div>
+    </article>
+
+    <article class="skill-card" data-category="open governance data">
+      <div class="skill-top"><span class="tier open">Free Starter</span><span class="version">v0.1</span></div>
+      <h3 class="skill-title">Governed RAG Readiness Assessment</h3>
+      <p class="skill-body">Determine whether retrieval preserves source authority, user entitlements, freshness, data lineage, DLP boundaries, citation requirements, and refusal behavior before a model sees content.</p>
+      <div class="skill-output">OUTPUT → readiness score, critical blockers, control design, bounded pilot scope</div>
+      <div class="tags"><span class="tag">RAG</span><span class="tag">entitlements</span><span class="tag">citations</span><span class="tag">DLP</span></div>
+      <div class="assurance">Retrieval enforced before generation</div>
+      <div class="skill-actions"><a class="skill-link" href="library/governed-rag-readiness-assessment/SKILL.md" download>Download SKILL.md</a><a class="skill-link secondary" href="library/governed-rag-readiness-assessment/SKILL.md">Inspect</a></div>
+    </article>
+
+    <article class="skill-card" data-category="governance executive">
+      <div class="skill-top"><span class="tier pro">Professional Pack</span><span class="version">planned</span></div>
+      <h3 class="skill-title">AI Use-Case Risk Classification</h3>
+      <p class="skill-body">Classify proposed AI work by data sensitivity, action authority, external reliance, decision consequence, reversibility, human oversight, and evidence requirements.</p>
+      <div class="skill-output">INCLUDES → risk rubric, approval matrix, control baseline, pilot decision memo</div>
+      <div class="tags"><span class="tag">intake</span><span class="tag">risk tier</span><span class="tag">approval</span><span class="tag">controls</span></div>
+      <div class="assurance">Designed for portfolio governance</div>
+      <div class="skill-actions"><a class="skill-link secondary" href="mailto:paulh@npmit.com?subject=AI%20Use-Case%20Risk%20Classification%20Pack">Request Early Access</a></div>
+    </article>
+
+    <article class="skill-card" data-category="executive governance">
+      <div class="skill-top"><span class="tier pro">Professional Pack</span><span class="version">planned</span></div>
+      <h3 class="skill-title">Board AI Initiative Review</h3>
+      <p class="skill-body">Turn a technical proposal into an executive decision: business outcome, accountability, capability surface, control evidence, economics, model exit strategy, and named conditions for approval.</p>
+      <div class="skill-output">INCLUDES → board brief, red-team questions, decision conditions, evidence checklist</div>
+      <div class="tags"><span class="tag">board</span><span class="tag">CIO</span><span class="tag">CISO</span><span class="tag">ROI</span></div>
+      <div class="assurance">Decision-ready, not demo-ready</div>
+      <div class="skill-actions"><a class="skill-link secondary" href="mailto:paulh@npmit.com?subject=Board%20AI%20Initiative%20Review%20Pack">Request Early Access</a></div>
+    </article>
+
+    <article class="skill-card" data-category="data governance operations">
+      <div class="skill-top"><span class="tier pro">Professional Pack</span><span class="version">planned</span></div>
+      <h3 class="skill-title">Deterministic Enterprise Data Access Design</h3>
+      <p class="skill-body">Design natural-language access to SQL, ERP, CRM, or operational systems without giving the model raw query authority, broad credentials, or uncontrolled write access.</p>
+      <div class="skill-output">INCLUDES → intent schema, allowlisted operations, stored-procedure pattern, audit contract</div>
+      <div class="tags"><span class="tag">SQL</span><span class="tag">ERP</span><span class="tag">least privilege</span><span class="tag">APEX</span></div>
+      <div class="assurance">The model interprets; the architecture authorizes</div>
+      <div class="skill-actions"><a class="skill-link secondary" href="mailto:paulh@npmit.com?subject=Deterministic%20Enterprise%20Data%20Access%20Pack">Request Early Access</a></div>
+    </article>
+
+    <article class="skill-card" data-category="operations data executive">
+      <div class="skill-top"><span class="tier enterprise">Enterprise</span><span class="version">custom</span></div>
+      <h3 class="skill-title">Manufacturing & ERP AI Workflow Design</h3>
+      <p class="skill-body">Convert operational problems—shortages, production blockers, sales opportunity scoring, quality questions, and ERP reporting—into bounded AI workflows with owners and measurable outcomes.</p>
+      <div class="skill-output">DELIVERY → workflow portfolio, data contract, control design, 30-day pilot roadmap</div>
+      <div class="tags"><span class="tag">manufacturing</span><span class="tag">Epicor</span><span class="tag">operations</span><span class="tag">ROI</span></div>
+      <div class="assurance">Institutional knowledge becomes executable</div>
+      <div class="skill-actions"><a class="skill-link secondary" href="#contact">Build a Custom Skill</a></div>
+    </article>
+  </div>
+</section>
+
+<section id="architecture">
+  <div class="section-label">Skills + APEX</div>
+  <h2>Instructions shape behavior. <span class="accent">Architecture limits authority.</span></h2>
+  <p class="section-desc">A high-quality skill is still not a security boundary. OpsChainAI pairs executable operating methods with APEX controls that sit outside the model.</p>
+
+  <div class="flow-grid reveal">
+    <div class="flow-step"><div class="flow-num">01</div><div class="flow-title">Select Skill</div><div class="flow-question">What method applies?</div><div class="flow-body">Trigger and scope identify the approved operating method for the request.</div></div>
+    <div class="flow-step"><div class="flow-num">02</div><div class="flow-title">Validate Context</div><div class="flow-question">Who is asking?</div><div class="flow-body">Identity, role, data class, workflow state, and required approvals are checked.</div></div>
+    <div class="flow-step"><div class="flow-num">03</div><div class="flow-title">Approve Capability</div><div class="flow-question">What may run?</div><div class="flow-body">Only registered tools, allowed actions, valid inputs, and policy-matched operations proceed.</div></div>
+    <div class="flow-step"><div class="flow-num">04</div><div class="flow-title">Use Scoped Access</div><div class="flow-question">What can it touch?</div><div class="flow-body">Managed identity, least privilege, RBAC, and resource boundaries constrain execution.</div></div>
+    <div class="flow-step"><div class="flow-num">05</div><div class="flow-title">Record Evidence</div><div class="flow-question">What happened?</div><div class="flow-body">Inputs, sources, capability, decision, result, refusal, and approval state are auditable.</div></div>
+  </div>
+  <div class="architecture-note reveal">A prompt-injected model can reinterpret prose. It cannot grant itself a database permission that does not exist.</div>
+</section>
+
+<section>
+  <div class="section-label">Commercial Model</div>
+  <h2>Public knowledge creates stature. <span class="accent2">Governed implementation creates value.</span></h2>
+  <p class="section-desc">The library is designed as a credibility engine and a path to higher-value work—not a shelf of disposable prompts.</p>
+
+  <div class="offer-grid reveal">
+    <div class="offer-card">
+      <div class="offer-kicker">Community</div>
+      <div class="offer-title">Free Starter Skills</div>
+      <p class="offer-body">Inspectable methods that demonstrate the OpsChainAI standard and help teams improve internal practice immediately.</p>
+      <ul class="offer-list"><li>Public SKILL.md files</li><li>Clear output templates</li><li>Evaluation prompts</li><li>Versioned improvements</li></ul>
+      <a class="skill-link" href="#library">Download Free</a>
+    </div>
+    <div class="offer-card">
+      <div class="offer-kicker">Professional</div>
+      <div class="offer-title">Operational Skill Packs</div>
+      <p class="offer-body">Complete methods for enterprise architects, AI leaders, CIOs, CISOs, and transformation teams.</p>
+      <ul class="offer-list"><li>Assessment worksheets</li><li>Scoring rubrics</li><li>Evaluation suites</li><li>Decision and evidence templates</li></ul>
+      <a class="skill-link secondary" href="mailto:paulh@npmit.com?subject=OpsChainAI%20Professional%20Skill%20Packs">Discuss Licensing</a>
+    </div>
+    <div class="offer-card">
+      <div class="offer-kicker">Enterprise</div>
+      <div class="offer-title">Custom Governed Skill Library</div>
+      <p class="offer-body">Convert policies, workflows, institutional knowledge, and approval structures into a governed operating library.</p>
+      <ul class="offer-list"><li>Domain-owner interviews</li><li>Custom skills and evals</li><li>APEX control integration</li><li>Governance and update model</li></ul>
+      <a class="skill-link secondary" href="#contact">Request a Briefing</a>
+    </div>
+  </div>
+</section>
+
+<section id="sources">
+  <div class="section-label">Standards & Evidence</div>
+  <h2>Built in public. <span class="accent">Grounded in evidence.</span></h2>
+  <p class="section-desc">OpsChainAI uses the open Agent Skills directory format and extends it with an enterprise assurance methodology.</p>
+  <div class="sources-list reveal">
+    <div class="source-row"><div class="source-type">Specification</div><div class="source-title">Agent Skills: required SKILL.md, optional scripts, references, assets, metadata, and tool declarations.</div><a class="source-link" href="https://agentskills.io/specification" target="_blank" rel="noopener">OPEN ↗</a></div>
+    <div class="source-row"><div class="source-type">Reference</div><div class="source-title">Anthropic public skills repository and examples of structured, production-oriented skills.</div><a class="source-link" href="https://github.com/anthropics/skills" target="_blank" rel="noopener">OPEN ↗</a></div>
+    <div class="source-row"><div class="source-type">Quality Research</div><div class="source-title">From Anatomy to Smells: an empirical study of 238 SKILL.md files and authoring-practice violations.</div><a class="source-link" href="https://arxiv.org/abs/2607.01456" target="_blank" rel="noopener">OPEN ↗</a></div>
+    <div class="source-row"><div class="source-type">Security Research</div><div class="source-title">Under the Hood of SKILL.md: semantic supply-chain attacks across discovery, selection, and governance.</div><a class="source-link" href="https://arxiv.org/abs/2605.11418" target="_blank" rel="noopener">OPEN ↗</a></div>
+    <div class="source-row"><div class="source-type">Ecosystem Research</div><div class="source-title">SkillCorpus: large-scale curation and evaluation of the open skill ecosystem.</div><a class="source-link" href="https://arxiv.org/abs/2607.15557" target="_blank" rel="noopener">OPEN ↗</a></div>
+  </div>
+</section>
+
+<div class="contact-block reveal" id="contact">
+  <div class="section-label" style="text-align:center;">Custom Enterprise Library</div>
+  <h2>Your most valuable expertise already exists.<br><span class="accent">Make it executable without making it uncontrolled.</span></h2>
+  <p class="contact-sub">OpsChainAI converts enterprise policies, expert judgment, operating procedures, and approval structures into tested Agent Skills—and connects them to governed capabilities through APEX.</p>
+  <a href="mailto:paulh@npmit.com?subject=OpsChainAI%20Enterprise%20Skill%20Library" class="contact-email">paulh@npmit.com</a>
+  <div style="margin-top:1rem;"><a href="tel:8556768324" style="font-family:'DM Mono',monospace; font-size:1rem; color:var(--accent2); text-decoration:none; border-bottom:1px solid var(--accent2); padding-bottom:2px;">(855) 676-8324</a></div>
+  <div class="contact-meta">Paul Hasselbring · Founder & Principal Architect · NPM Technologies · Fort Lauderdale, FL</div>
+</div>
+
+<footer>
+  <div class="footer-logo">Ops<span>Chain</span>AI</div>
+  <div class="footer-copy">Executable Knowledge for Governed Enterprise AI · A research and solutions initiative from NPM Technologies · Skills Library v0.1</div>
+</footer>
+
+<script>
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.08 });
+  reveals.forEach(el => observer.observe(el));
+
+  const filterButtons = document.querySelectorAll('.filter-btn');
+  const skillCards = document.querySelectorAll('.skill-card');
+  filterButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      filterButtons.forEach(b => b.classList.remove('active'));
+      button.classList.add('active');
+      const filter = button.dataset.filter;
+      skillCards.forEach(card => {
+        const categories = card.dataset.category.split(' ');
+        card.classList.toggle('hidden', filter !== 'all' && !categories.includes(filter));
+      });
+    });
+  });
+</script>
+</body>
+</html>
