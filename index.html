@@ -174,24 +174,6 @@
     animation: fadeUp 0.6s ease forwards 0.55s;
   }
 
-  .hero-thesis {
-    max-width: 760px;
-    margin: 0 0 2rem;
-    padding: 1.15rem 1.35rem;
-    border: 1px solid rgba(0,212,255,0.35);
-    background: linear-gradient(135deg, rgba(0,212,255,0.10), rgba(0,255,157,0.06));
-    color: var(--text);
-    font-size: clamp(1.02rem, 1.55vw, 1.28rem);
-    line-height: 1.65;
-    opacity: 0;
-    animation: fadeUp 0.6s ease forwards 0.58s;
-  }
-
-  .hero-thesis strong {
-    color: var(--accent2);
-    font-weight: 500;
-  }
-
   .hero-actions {
     display: flex;
     gap: 1rem;
@@ -794,8 +776,9 @@
     <a href="#problem" class="nav-link">The Problem</a>
     <a href="#architecture" class="nav-link">Architecture</a>
     <a href="#delivery" class="nav-link">Delivery</a>
-    <a href="/skills/" class="nav-link">Skills</a>
-    <a href="/apex/demo/apex-demo.html" class="nav-link">Live Demo</a>
+    <a href="skills/index.html" class="nav-link">Skills</a>
+    <a href="apex/demo/apex-demo.html" class="nav-link">Live Demo</a>
+    <a href="evaluation/index.html" class="nav-link">Evaluation</a>
     <a href="#resources" class="nav-link">Resources</a>
   </div>
   <div style="display:flex; gap:1rem; align-items:center;">
@@ -817,9 +800,6 @@
     </p>
     <div class="hero-note">
       APEX mediates every AI capability call through policy, identity, RBAC, and audit. Default-deny. Working software on Azure.
-    </div>
-    <div class="hero-thesis">
-      <strong>AI governance is the door that lets enterprises say yes to AI safely, productively, and at scale.</strong>
     </div>
     <div class="hero-actions">
       <a href="#architecture" class="btn-primary">View Architecture</a>
@@ -1045,17 +1025,22 @@
     <div class="resource-card">
       <div class="resource-title">Live Controls Walkthrough</div>
       <div class="resource-body">Step through three running governance controls: security-trimmed retrieval, the DLP boundary, and deterministic data access with database-enforced permissions.</div>
-      <a href="/apex/demo/apex-demo.html" class="resource-cta">Open Walkthrough</a>
+      <a href="apex/demo/apex-demo.html" class="resource-cta">Open Walkthrough</a>
     </div>
     <div class="resource-card">
       <div class="resource-title">Technical Brief</div>
       <div class="resource-body">Full architecture overview including governance layers, APIM enforcement, audit model, and enterprise value proposition.</div>
-      <a href="/apex/pdf/APEX-v07.pdf" class="resource-cta">Download PDF</a>
+      <a href="apex/pdf/APEX-v07.pdf" class="resource-cta">Download PDF</a>
     </div>
     <div class="resource-card">
       <div class="resource-title">Enterprise Agent Skills</div>
       <div class="resource-body">Browse quality-assured operating methods for AI governance, MCP control, governed RAG, deterministic data access, and executive review.</div>
-      <a href="/skills/" class="resource-cta">Browse Skills</a>
+      <a href="skills/index.html" class="resource-cta">Browse Skills</a>
+    </div>
+    <div class="resource-card">
+      <div class="resource-title">Evaluation Control Plane</div>
+      <div class="resource-body">See the working APEX release-gate showcase: nine-shape golden regression, execution-contract validation, a real defect caught by the gate, and an interactive drift detector.</div>
+      <a href="evaluation/index.html" class="resource-cta">Open Evaluation</a>
     </div>
     <div class="resource-card">
       <div class="resource-title">Technical Briefing</div>

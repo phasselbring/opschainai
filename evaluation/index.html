@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>APEX Evaluation Control Plane | OpsChainAI</title>
+<meta name="description" content="APEX Evaluation Control Plane: golden regression, governed execution-contract validation, drift detection, and AI release gates.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080c10;
+    --surface: #0d1318;
+    --border: #1a2530;
+    --accent: #00d4ff;
+    --accent2: #00ff9d;
+    --text: #e8eef4;
+    --muted: #5a7080;
+    --card: #0f1820;
+    --danger: #ff6b6b;
+    --danger-bg: #1a0f0f;
+    --safe-bg: #0f1a12;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 1.25rem 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+    background: rgba(8,12,16,0.85);
+    backdrop-filter: blur(12px);
+  }
+
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.1rem;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    text-decoration: none;
+  }
+  .logo span { color: var(--accent); }
+
+  .nav-links { display: flex; gap: 2rem; align-items: center; }
+  .nav-link {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-link:hover, .nav-link.active { color: var(--text); }
+
+  .nav-cta {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    text-decoration: none;
+    border: 1px solid var(--accent);
+    padding: 0.5rem 1.25rem;
+    transition: all 0.2s;
+  }
+  .nav-cta:hover { background: var(--accent); color: var(--bg); }
+
+  .hero {
+    position: relative;
+    min-height: 92vh;
+    display: flex;
+    align-items: center;
+    padding: 8rem 3rem 6rem;
+    z-index: 1;
+  }
+  .hero-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    width: 100%;
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.2fr .8fr;
+    gap: 4rem;
+    align-items: center;
+  }
+  .hero-label, .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+  }
+  .hero-label::before, .section-label::before {
+    content: '//';
+    margin-right: 0.5rem;
+    opacity: 0.5;
+  }
+  h1, h2, h3 {
+    font-family: 'Syne', sans-serif;
+  }
+  h1 {
+    font-weight: 800;
+    font-size: clamp(2.8rem, 5vw, 5rem);
+    line-height: 1.05;
+    letter-spacing: -0.04em;
+    margin-bottom: 2rem;
+  }
+  h1 .accent { color: var(--accent); }
+  h2 {
+    font-size: clamp(2rem, 4vw, 3.4rem);
+    line-height: 1.12;
+    letter-spacing: -0.03em;
+    margin-bottom: 1rem;
+  }
+  h2 .accent { color: var(--accent); }
+  h2 .accent2 { color: var(--accent2); }
+
+  .hero-sub, .section-sub {
+    color: var(--muted);
+    font-size: 1.05rem;
+    max-width: 760px;
+    line-height: 1.8;
+  }
+  .hero-note {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--accent2);
+    border-left: 2px solid var(--accent2);
+    padding-left: 1rem;
+    margin-top: 1.5rem;
+  }
+  .hero-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+  }
+  .btn-primary, .btn-ghost {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    padding: 0.9rem 1.7rem;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.2s;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: var(--bg);
+    font-weight: 500;
+  }
+  .btn-primary:hover { background: #00b8e0; transform: translateY(-1px); }
+  .btn-ghost {
+    color: var(--muted);
+    border: 1px solid var(--border);
+  }
+  .btn-ghost:hover { color: var(--text); border-color: var(--muted); }
+
+  .status-card {
+    border: 1px solid var(--border);
+    background: var(--card);
+    padding: 2rem;
+  }
+  .status-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    border-bottom: 1px solid var(--border);
+    padding: 1rem 0;
+  }
+  .status-row:first-child { padding-top: 0; }
+  .status-row:last-child { border-bottom: 0; padding-bottom: 0; }
+  .status-label { color: var(--muted); }
+  .status-val {
+    font-family: 'DM Mono', monospace;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+  .good { color: var(--accent2); }
+  .bad { color: var(--danger); }
+
+  section {
+    position: relative;
+    z-index: 1;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 6rem 3rem;
+  }
+
+  .stats, .cards, .demo-grid {
+    display: grid;
+    gap: 1rem;
+  }
+  .stats { grid-template-columns: repeat(4, 1fr); }
+  .cards { grid-template-columns: repeat(3, 1fr); margin-top: 3rem; }
+  .demo-grid { grid-template-columns: 1fr 1fr; margin-top: 3rem; }
+
+  .stat, .card {
+    border: 1px solid var(--border);
+    background: var(--card);
+    padding: 2rem;
+  }
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+  }
+  .stat-label, .card p {
+    color: var(--muted);
+    font-size: 0.85rem;
+  }
+  .card h3 {
+    font-size: 1rem;
+    margin-bottom: 0.7rem;
+    color: var(--accent);
+  }
+
+  .checklist {
+    list-style: none;
+    margin-top: 1.25rem;
+  }
+  .checklist li {
+    padding: .35rem 0;
+    color: var(--text);
+    font-size: .88rem;
+  }
+  .checklist li::before {
+    content: '✓';
+    color: var(--accent2);
+    font-weight: 700;
+    margin-right: .6rem;
+  }
+
+  .incident {
+    margin-top: 2.5rem;
+    border: 1px solid #402026;
+    border-left: 3px solid var(--danger);
+    background: #151117;
+    padding: 2rem;
+  }
+  .incident strong {
+    display: block;
+    margin: 1rem 0 .45rem;
+  }
+  .incident strong:first-child { margin-top: 0; }
+  code {
+    display: block;
+    font-family: 'DM Mono', monospace;
+    font-size: .78rem;
+    color: #dff8ff;
+    padding: .8rem 1rem;
+    border: 1px solid var(--border);
+    background: #071018;
+    overflow-x: auto;
+  }
+  .incident p { margin-top: 1rem; color: var(--text); }
+
+  .flow {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: .65rem;
+    margin-top: 3rem;
+  }
+  .flow-step {
+    border: 1px solid var(--border);
+    background: var(--card);
+    padding: 1.2rem;
+    min-height: 125px;
+  }
+  .flow-step strong {
+    display: block;
+    font-family: 'Syne', sans-serif;
+    margin-bottom: .5rem;
+    color: var(--accent);
+  }
+  .flow-step span { color: var(--muted); font-size: .76rem; }
+
+  label {
+    display: block;
+    font-family: 'DM Mono', monospace;
+    font-size: .72rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    margin-bottom: .45rem;
+  }
+  textarea, input {
+    width: 100%;
+    background: #071018;
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: .8rem;
+    font-family: 'DM Mono', monospace;
+    font-size: .78rem;
+    margin-bottom: 1rem;
+  }
+  textarea { min-height: 105px; resize: vertical; }
+  button {
+    font-family: 'DM Mono', monospace;
+    font-size: .78rem;
+    letter-spacing: .06em;
+    background: var(--accent);
+    color: var(--bg);
+    border: 0;
+    padding: .8rem 1.3rem;
+    cursor: pointer;
+    font-weight: 500;
+  }
+  button:hover { background: #00b8e0; }
+
+  .result-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: .75rem;
+    margin-top: 1rem;
+  }
+  .result {
+    border: 1px solid var(--border);
+    background: #071018;
+    padding: 1rem;
+  }
+  .result small {
+    display: block;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    font-size: .66rem;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+  }
+  .result b {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.35rem;
+  }
+  .release {
+    margin-top: 1rem;
+    border: 1px solid var(--danger);
+    color: var(--danger);
+    background: var(--danger-bg);
+    font-family: 'DM Mono', monospace;
+    text-align: center;
+    padding: 1rem;
+    font-weight: 500;
+    letter-spacing: .08em;
+  }
+  .release.pass {
+    border-color: var(--accent2);
+    color: var(--accent2);
+    background: var(--safe-bg);
+  }
+
+  .next-box {
+    border-left: 3px solid var(--accent2);
+    background: var(--safe-bg);
+    padding: 1.5rem 2rem;
+    margin-top: 2rem;
+    color: var(--text);
+  }
+  .next-box b { color: var(--accent2); }
+
+  footer {
+    position: relative;
+    z-index: 1;
+    max-width: 1100px;
+    margin: 0 auto;
+    border-top: 1px solid var(--border);
+    padding: 2rem 3rem 4rem;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    font-size: .68rem;
+    letter-spacing: .05em;
+  }
+
+  @media (max-width: 960px) {
+    .hero-grid, .demo-grid { grid-template-columns: 1fr; }
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    .cards { grid-template-columns: 1fr; }
+    .flow { grid-template-columns: repeat(2, 1fr); }
+    .nav-links { display: none; }
+  }
+  @media (max-width: 600px) {
+    nav { padding: 1rem 1.25rem; }
+    .hero, section { padding-left: 1.25rem; padding-right: 1.25rem; }
+    .stats, .flow, .result-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="logo" href="../index.html">Ops<span>Chain</span>AI</a>
+  <div class="nav-links">
+    <a href="../index.html#architecture" class="nav-link">Architecture</a>
+    <a href="../index.html#delivery" class="nav-link">Delivery</a>
+    <a href="../skills/index.html" class="nav-link">Skills</a>
+    <a href="../apex/demo/apex-demo.html" class="nav-link">Live Demo</a>
+    <a href="index.html" class="nav-link active">Evaluation</a>
+    <a href="../index.html#resources" class="nav-link">Resources</a>
+  </div>
+  <a href="mailto:paulh@npmit.com" class="nav-cta">Request Briefing</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-grid">
+      <div>
+        <div class="hero-label">APEX / Evaluation Control Plane</div>
+        <h1>AI evals should be <span class="accent">release gates.</span></h1>
+        <p class="hero-sub">
+          The current APEX build validates generated execution plans before release and detects material quality drift over time.
+          Evaluation is treated as operational evidence — not a dashboard after the fact.
+        </p>
+        <div class="hero-note">
+          CURRENT BUILD: 9/9 GOLDEN REGRESSION PASS · EXECUTION-PARAMETER VALIDATION · PRINCIPAL PROPAGATION · DRIFT DETECTION
+        </div>
+        <div class="hero-actions">
+          <a href="#drift" class="btn-primary">Run Drift Demo</a>
+          <a href="#incident" class="btn-ghost">See the Defect APEX Caught</a>
+          <a href="../index.html" class="btn-ghost">Back to APEX</a>
+        </div>
+      </div>
+
+      <div class="status-card">
+        <div class="status-row"><span class="status-label">Golden regression</span><span class="status-val good">9 / 9 PASS</span></div>
+        <div class="status-row"><span class="status-label">Query shapes covered</span><span class="status-val">9</span></div>
+        <div class="status-row"><span class="status-label">Execution-contract validation</span><span class="status-val good">ACTIVE</span></div>
+        <div class="status-row"><span class="status-label">Demonstrated drift severity</span><span class="status-val bad">HIGH</span></div>
+        <div class="status-row"><span class="status-label">Failed gate action</span><span class="status-val bad">BLOCK</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section>
+  <div class="stats">
+    <div class="stat"><div class="stat-num good">9/9</div><div class="stat-label">Generated query shapes passing regression</div></div>
+    <div class="stat"><div class="stat-num">94.75%</div><div class="stat-label">Known-good quality baseline in drift demo</div></div>
+    <div class="stat"><div class="stat-num bad">84.00%</div><div class="stat-label">Current score in degraded window</div></div>
+    <div class="stat"><div class="stat-num bad">-10.75 pts</div><div class="stat-label">Material quality movement detected</div></div>
+  </div>
+</section>
+
+<section id="architecture">
+  <div class="section-label">Evaluation Architecture</div>
+  <h2>Validate more than <span class="accent">intent accuracy.</span></h2>
+  <p class="section-sub">
+    APEX freezes known-good cases and validates the governed execution plan all the way to the stored procedure,
+    bound parameters, date interpretation, and calling principal.
+  </p>
+
+  <div class="cards">
+    <div class="card">
+      <h3>Golden Regression</h3>
+      <p>Known-good cases validate generated data-domain behavior before release.</p>
+      <ul class="checklist"><li>Intent</li><li>Execution shape</li><li>Stored procedure</li></ul>
+    </div>
+    <div class="card">
+      <h3>Execution Contract</h3>
+      <p>Deterministic controls inspect what will actually touch enterprise systems.</p>
+      <ul class="checklist"><li>Metric + dimension</li><li>Dates + granularity</li><li>Top-N + lookup filters</li><li>Principal propagation</li></ul>
+    </div>
+    <div class="card">
+      <h3>Drift + Release Control</h3>
+      <p>Quality windows are compared to a known-good baseline and failures become release decisions.</p>
+      <ul class="checklist"><li>Material delta detection</li><li>Severity assignment</li><li>PASS / BLOCK</li></ul>
+    </div>
+  </div>
+
+  <div class="flow">
+    <div class="flow-step"><strong>Domain Factory</strong><span>Generate governed domain assets</span></div>
+    <div class="flow-step"><strong>Golden Cases</strong><span>Freeze expected behavior</span></div>
+    <div class="flow-step"><strong>Execution Plan</strong><span>Bind proc, params, identity</span></div>
+    <div class="flow-step"><strong>Evaluation</strong><span>Score behavior</span></div>
+    <div class="flow-step"><strong>Drift</strong><span>Compare quality windows</span></div>
+    <div class="flow-step"><strong>Release Gate</strong><span>Promote or BLOCK</span></div>
+  </div>
+</section>
+
+<section id="incident">
+  <div class="section-label">Regression Finding</div>
+  <h2>The gate already caught a <span class="accent">real defect.</span></h2>
+  <p class="section-sub">
+    Expanding the APEX golden suite exposed a routing-precedence defect in the generated data-domain orchestration path.
+  </p>
+
+  <div class="incident">
+    <strong>Observed classifier result</strong>
+    <code>KPI_TIMESERIES_BY_DIMENSION</code>
+
+    <strong>Incorrect runtime route</strong>
+    <code>KPI_TIMESERIES_BY_DIMENSION → GROUPBY</code>
+
+    <strong>Expected route</strong>
+    <code>KPI_TIMESERIES_BY_DIMENSION → TIMESERIES</code>
+
+    <p>
+      A generic grouping-entity heuristic was overriding a strong explicit time-series intent.
+      The regression suite returned <b>BLOCK</b>. Routing precedence was corrected, the original group-by path was
+      revalidated, and the regression remains in the suite to prevent recurrence.
+    </p>
+  </div>
+</section>
+
+<section id="drift">
+  <div class="section-label">Interactive Demonstration</div>
+  <h2>Try the <span class="accent">drift detector.</span></h2>
+  <p class="section-sub">
+    This public demo runs entirely in the browser. It contains no credentials, enterprise data, or external model calls.
+  </p>
+
+  <div class="demo-grid">
+    <div class="card">
+      <label for="baseline">Baseline scores</label>
+      <textarea id="baseline">0.95, 0.94, 0.96, 0.93, 0.95, 0.94, 0.95, 0.96</textarea>
+
+      <label for="current">Current scores</label>
+      <textarea id="current">0.86, 0.84, 0.82, 0.85, 0.83, 0.84</textarea>
+
+      <label for="threshold">Minimum material delta</label>
+      <input id="threshold" type="number" min="0" max="1" step="0.01" value="0.05">
+
+      <button onclick="runDrift()">Run Drift Check</button>
+    </div>
+
+    <div class="card">
+      <h3>Drift Result</h3>
+      <div class="result-grid">
+        <div class="result"><small>Baseline mean</small><b id="baselineMean">94.75%</b></div>
+        <div class="result"><small>Current mean</small><b id="currentMean">84.00%</b></div>
+        <div class="result"><small>Delta</small><b id="deltaOut">-10.75 pts</b></div>
+        <div class="result"><small>Severity</small><b id="severity" class="bad">HIGH</b></div>
+      </div>
+      <div id="release" class="release">RELEASE DECISION: BLOCK</div>
+    </div>
+  </div>
+
+  <div class="next-box">
+    <b>Next layer under active development:</b>
+    model-based semantic scoring for groundedness, correctness, and completeness on version-aware traces,
+    followed by persisted score history and automatic rolling-window drift analysis.
+  </div>
+</section>
+
+<footer>
+  OpsChainAI / APEX · Governed Enterprise AI Control Plane ·
+  <a href="mailto:paulh@npmit.com" style="color:var(--accent);text-decoration:none;">paulh@npmit.com</a>
+</footer>
+
+<script>
+function parseScores(text) {
+  return text.split(/[,\s]+/).map(v => Number(v.trim())).filter(Number.isFinite);
+}
+function mean(values) {
+  return values.reduce((a,b) => a + b, 0) / values.length;
+}
+function severityFor(deltaAbs, drift) {
+  if (!drift) return "NONE";
+  if (deltaAbs >= 0.15) return "CRITICAL";
+  if (deltaAbs >= 0.10) return "HIGH";
+  if (deltaAbs >= 0.05) return "MEDIUM";
+  return "LOW";
+}
+function runDrift() {
+  const baseline = parseScores(document.getElementById("baseline").value);
+  const current = parseScores(document.getElementById("current").value);
+  const threshold = Number(document.getElementById("threshold").value);
+
+  if (baseline.length < 2 || current.length < 2) {
+    alert("Enter at least two numeric observations in both windows.");
+    return;
+  }
+
+  const b = mean(baseline);
+  const c = mean(current);
+  const d = c - b;
+  const drift = Math.abs(d) >= threshold;
+  const severity = severityFor(Math.abs(d), drift);
+
+  document.getElementById("baselineMean").textContent = (b * 100).toFixed(2) + "%";
+  document.getElementById("currentMean").textContent = (c * 100).toFixed(2) + "%";
+  document.getElementById("deltaOut").textContent = (d * 100).toFixed(2) + " pts";
+
+  const sev = document.getElementById("severity");
+  sev.textContent = severity;
+  sev.className = drift ? "bad" : "good";
+
+  const release = document.getElementById("release");
+  if (drift) {
+    release.textContent = "RELEASE DECISION: BLOCK";
+    release.className = "release";
+  } else {
+    release.textContent = "RELEASE DECISION: PASS";
+    release.className = "release pass";
+  }
+}
+</script>
+</body>
+</html>
