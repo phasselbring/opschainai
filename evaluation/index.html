@@ -535,7 +535,8 @@
   <div class="section-label">Interactive Demonstration</div>
   <h2>Try the <span class="accent">drift detector.</span></h2>
   <p class="section-sub">
-    This public demo runs entirely in the browser. It contains no credentials, enterprise data, or external model calls.
+    This public demo runs entirely in the browser. It mirrors the current APEX drift logic by combining a minimum material
+    delta with a z-score significance test. It contains no credentials, enterprise data, or external model calls.
   </p>
 
   <div class="demo-grid">
@@ -548,6 +549,9 @@
 
       <label for="threshold">Minimum material delta</label>
       <input id="threshold" type="number" min="0" max="1" step="0.01" value="0.05">
+      <div style="font-family:'DM Mono',monospace;font-size:.66rem;color:var(--muted);margin:-.5rem 0 1rem;">
+        Statistical threshold: |z| ≥ 2.5
+      </div>
 
       <button onclick="runDrift()">Run Drift Check</button>
     </div>
@@ -558,6 +562,8 @@
         <div class="result"><small>Baseline mean</small><b id="baselineMean">94.75%</b></div>
         <div class="result"><small>Current mean</small><b id="currentMean">84.00%</b></div>
         <div class="result"><small>Delta</small><b id="deltaOut">-10.75 pts</b></div>
+        <div class="result"><small>Z-score</small><b id="zScore">-25.44</b></div>
+        <div class="result"><small>Statistical significance</small><b id="significance" class="bad">SIGNIFICANT</b></div>
         <div class="result"><small>Severity</small><b id="severity" class="bad">HIGH</b></div>
       </div>
       <div id="release" class="release">RELEASE DECISION: BLOCK</div>
@@ -580,9 +586,19 @@
 function parseScores(text) {
   return text.split(/[,\s]+/).map(v => Number(v.trim())).filter(Number.isFinite);
 }
+
 function mean(values) {
   return values.reduce((a,b) => a + b, 0) / values.length;
 }
+
+function sampleStdDev(values) {
+  if (values.length < 2) return 0;
+  const m = mean(values);
+  const variance =
+    values.reduce((sum, x) => sum + Math.pow(x - m, 2), 0) / (values.length - 1);
+  return Math.sqrt(variance);
+}
+
 function severityFor(deltaAbs, drift) {
   if (!drift) return "NONE";
   if (deltaAbs >= 0.15) return "CRITICAL";
@@ -590,32 +606,62 @@ function severityFor(deltaAbs, drift) {
   if (deltaAbs >= 0.05) return "MEDIUM";
   return "LOW";
 }
+
 function runDrift() {
   const baseline = parseScores(document.getElementById("baseline").value);
   const current = parseScores(document.getElementById("current").value);
-  const threshold = Number(document.getElementById("threshold").value);
+  const minDelta = Number(document.getElementById("threshold").value);
+  const zThreshold = 2.5;
 
   if (baseline.length < 2 || current.length < 2) {
     alert("Enter at least two numeric observations in both windows.");
     return;
   }
 
-  const b = mean(baseline);
-  const c = mean(current);
-  const d = c - b;
-  const drift = Math.abs(d) >= threshold;
-  const severity = severityFor(Math.abs(d), drift);
+  const baselineMean = mean(baseline);
+  const currentMean = mean(current);
+  const delta = currentMean - baselineMean;
+  const deltaAbs = Math.abs(delta);
 
-  document.getElementById("baselineMean").textContent = (b * 100).toFixed(2) + "%";
-  document.getElementById("currentMean").textContent = (c * 100).toFixed(2) + "%";
-  document.getElementById("deltaOut").textContent = (d * 100).toFixed(2) + " pts";
+  const baselineSd = sampleStdDev(baseline);
+
+  let zScore = null;
+  let statisticallyMaterial;
+
+  // Mirrors services/evaluation/drift.py.
+  if (baselineSd === 0) {
+    statisticallyMaterial = deltaAbs >= minDelta;
+  } else {
+    const standardError = baselineSd / Math.sqrt(current.length);
+    zScore = delta / standardError;
+    statisticallyMaterial = Math.abs(zScore) >= zThreshold;
+  }
+
+  const driftDetected = deltaAbs >= minDelta && statisticallyMaterial;
+  const severity = severityFor(deltaAbs, driftDetected);
+
+  document.getElementById("baselineMean").textContent =
+    (baselineMean * 100).toFixed(2) + "%";
+
+  document.getElementById("currentMean").textContent =
+    (currentMean * 100).toFixed(2) + "%";
+
+  document.getElementById("deltaOut").textContent =
+    (delta * 100).toFixed(2) + " pts";
+
+  document.getElementById("zScore").textContent =
+    zScore === null ? "N/A" : zScore.toFixed(2);
+
+  const sig = document.getElementById("significance");
+  sig.textContent = statisticallyMaterial ? "SIGNIFICANT" : "NOT SIGNIFICANT";
+  sig.className = statisticallyMaterial ? "bad" : "good";
 
   const sev = document.getElementById("severity");
   sev.textContent = severity;
-  sev.className = drift ? "bad" : "good";
+  sev.className = driftDetected ? "bad" : "good";
 
   const release = document.getElementById("release");
-  if (drift) {
+  if (driftDetected) {
     release.textContent = "RELEASE DECISION: BLOCK";
     release.className = "release";
   } else {
@@ -623,6 +669,8 @@ function runDrift() {
     release.className = "release pass";
   }
 }
+
+runDrift();
 </script>
 </body>
 </html>
