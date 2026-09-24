@@ -1,0 +1,54 @@
+{
+  "title": "APEX live security validation",
+  "validated_on": "2026-09-24",
+  "provenance": "Transcribed from operator-supplied console results and deployment output; this file is a public summary, not the original machine-generated reports.",
+  "gateway_commit": "f990a45",
+  "sql_revision": "apex-gateway-security-test--0000006",
+  "sql_image_digest": "sha256:fdff2e3369a88fa5584a393829fab36a2d86e916235f98fb92c984e804830113",
+  "sql_checks": [
+    {
+      "test": "Approved customer",
+      "http": 200,
+      "result": "Exact synthetic record returned",
+      "passed": true
+    },
+    {
+      "test": "Restricted customer",
+      "http": 403,
+      "result": "Resource access denied",
+      "passed": true
+    },
+    {
+      "test": "Changed customer argument",
+      "http": 403,
+      "result": "Invalid execution authorization",
+      "passed": true
+    },
+    {
+      "test": "Repeated execution",
+      "http": 409,
+      "result": "Execution already consumed",
+      "passed": true
+    },
+    {
+      "test": "Original request after tampering",
+      "http": 200,
+      "result": "Original authorization still valid",
+      "passed": true
+    }
+  ],
+  "original_report_paths": [
+    "docs/security/live-validation/governed-sql-20260924T221238Z.json",
+    "docs/security/live-validation/persistent-replay-20260924T105939Z.json",
+    "docs/security/live-validation/execution-results-20260924T012330Z.json"
+  ],
+  "restart_checks": "Used execution 409; spent budget 403; fresh execution 200 after replacement replica.",
+  "concurrency_checks": "Duplicate execution and one-action-budget tests each allowed 1 of 6 requests.",
+  "limitations": [
+    "Synthetic data; isolated test deployment",
+    "No Artifactory integration tested",
+    "No direct-bypass or host-compromise containment demonstrated",
+    "No independent audit-store administration demonstrated",
+    "No claim of exactly-once backend side effects or prevention of an entire incident"
+  ]
+}
